@@ -13,7 +13,7 @@ documentclass: book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
-github-repo: 'BioDataScience-Course/sdd-umons3-2022'
+github-repo: 'BioDataScience-Course/sdd-umons3-2023'
 url: 'https\://wp.sciviews.org/sdd-umons3/'
 description: "Tutoriel interactif pour la science des données avec R & SciViews-R III."
 cover-image: "images/front-cover.png"
@@ -49,13 +49,13 @@ sessioninfo::session_info()
 
 ## Vue générale des cours {.unnumbered}
 
-Cet ouvrage interactif est le troisième volume d'une série de trois ouvrages traitant de la science des données biologiques. L'écriture de cette suite de livres a débuté au cours de l'année académique 2018-2019. Pour l'année académique 2022-2023, cet ouvrage interactif est le support des cours suivants :
+Cet ouvrage interactif est le troisième volume d'une série de trois ouvrages traitant de la science des données biologiques. L'écriture de cette suite de livres a débuté au cours de l'année académique 2018-2019. Pour l'année académique 2023-2024, cet ouvrage interactif est le support des cours suivants :
 
--   [Science des données III : exploration et prédiction](http://applications.umons.ac.be/web/fr/pde/2022-2023/ue/US-M1-BIOL60-004-M.htm) aux premiers Masters BBMC (Biochimie, Biologie Moléculaire et Cellulaire) et BOE (Biologie des Organismes et Écologie) en Faculté des Sciences de l'Université de Mons, et dont le responsable est Philippe Grosjean
+-   [Science des données III : exploration et prédiction](http://applications.umons.ac.be/web/fr/pde/2023-2024/ue/US-M1-BIOL60-004-M.htm) aux premiers Masters BBMC (Biochimie, Biologie Moléculaire et Cellulaire) et BOE (Biologie des Organismes et Écologie) en Faculté des Sciences de l'Université de Mons, et dont le responsable est Philippe Grosjean
 
 -   [Science des données III](https://www.ulb.be/fr/programme/binf-y402) aux premiers Masters BBMC (Biochimie, Biologie Moléculaire et Cellulaire) en Faculté des Sciences de l'Université Libre de Bruxelles sur le campus de Charleroi, et dont le responsable est Philippe Grosjean
 
--   [Science des données IV : recherche reproductible](http://applications.umons.ac.be/web/fr/pde/2022-2023/ue/US-M2-BIOEFA-015-M.htm) cours à option donné aux deuxièmes années des mêmes Masters, et dont le responsable est également Philippe Grosjean
+-   [Science des données IV : recherche reproductible](http://applications.umons.ac.be/web/fr/pde/2023-2024/ue/US-M2-BIOEFA-015-M.htm) cours à option donné aux deuxièmes années des mêmes Masters, et dont le responsable est également Philippe Grosjean
 
 La matière est divisée en six modules de 6h chacun en présentiel pour SDD III, et six modules également pour SDD IV. Chaque module nécessitera environ 8h (variable, en fonction de votre rythme et de votre technique d'apprentissage) de travail à domicile. **Cette matière fait suite aux deux premiers cours dont les contenus sont considérés comme assimilés (voir [cours SDD I](https://wp.sciviews.org/sdd-umons){target="top"} et [cours SDD II](https://wp.sciviews.org/sdd-umons2){target="top"}).**
 
@@ -87,7 +87,7 @@ Le matériel pédagogique, rassemblé dans ce syllabus interactif, est aussi var
 
 -   des renvois vers des documents externes en ligne, types vidéos [Youtube](https://www.youtube.com/) ou [Vimeo](https://vimeo.com/), des ouvrages en ligne en anglais ou en français, des blogs, des tutoriels, des questions sur des sites comme [Stackoverflow](https://stackoverflow.com/) ou issues des [mailing lists R](https://www.r-project.org/mail.html), de [Twitter](https://twitter.com/), ...
 
--   des diapositives de présentations distribuées via le dépôt [sdd_lessons sur BioDataScience-Course](https://github.com/BioDataScience-Course/sdd_lessons) viennent compléter le tout.
+-   des diapositives de présentations distribuées via le dépôt [sdd_lessons sur BioDataScience-Course](https://github.com/BioDataScience-Course/sdd_lessonstree/2023-2024) viennent compléter le tout.
 
 ```{block, type='info'}
 
@@ -149,16 +149,16 @@ L'ensemble de vos réponses sont collectées et utilisées afin de construire la
 Votre progression au sein des exercices de chaque module est mise à votre disposition à la fin de chaque module ou bien depuis Moodle.
 
 ```{block, type='warning'}
-Les notes des exercices plus faciles de niveau 1 et 2 sont comptabilisés séparément des exercices plus difficiles. Il faut obtenir au moins 50% des points dans les exercices de niveau 3 et 4 pour bénéficier également de la note des exercices faciles de niveau 1 et 2. **Votre objectif est donc de bien vous préparer et de réussir vos projets, challenges et interrogations en présentiel.** Les exercices faciles vous aident à bien vous préparer. **Faites les sérieusement, c'est dans votre intérêt.**
+Les notes des exercices plus faciles de niveau 1, 2 et 3 sont comptabilisés séparément des exercices plus difficiles de niveau 4 et des interrogations, avec une pondération également en faveur de ces derniers. **Votre objectif est donc de bien vous préparer et de réussir vos projets, challenges et interrogations en présentiel.** Les exercices faciles vous aident à bien vous préparer. **Faites les sérieusement, c'est dans votre intérêt.**
 
-L'évaluation est **continue** tout au long de l'année. Il n'y a pas d'examen en fin d'année et il n'y a pas moyen non plus de repasser un examen en seconde session. La présence aux séances est **obligatoire** pour cette raison et toute absence in,justifiée vous coutera un zéro pour la matière concernée.
+L'évaluation est **continue** tout au long de l'année. Il n'y a pas d'examen en fin d'année et il n'y a pas moyen non plus de repasser un examen en seconde session. La présence aux séances est **obligatoire** pour cette raison et toute absence injustifiée vous coûtera un zéro pour la matière concernée.
 ```
 
 ### Plan du cours {.unnumbered}
 
 Le plan du cours est une forme de contrat entre l'étudiant et les encadrants. Ce document structure les attentes de vos encadrants. Veuillez consulter ce document attentivement.
 
--   [Plan du cours de Science des données biologiques III : années 2022-2023](https://github.com/BioDataScience-Course/BioDataScience-Common/tree/2022-2023/docs/plan_de_cours/sdd3_plan_cours_2022-2023.md)
+-   [Plan du cours de Science des données biologiques III : années 2023-2024](https://github.com/BioDataScience-Course/BioDataScience-Common/tree/2023-2024/docs/plan_de_cours/sdd3_plan_cours_2023-2024.md)
 
 ## Issues {#issues .unnumbered}
 
@@ -171,7 +171,7 @@ if (exists("assignment2"))
     course.ids = c(
       'S-BIOG-025'         = !"C00Ga_{YY}M_issues"),
     course.urls = c(
-      'S-BIOG-025'         = "https://classroom.github.com/a/MMeWxqzG"),
+      'S-BIOG-025'         = "https://classroom.github.com/a/..."),
     course.ends = c(
       'S-BIOG-025'         = !"{W[53]+5} 23:59:59"),
     term = "", level = 0,
@@ -189,7 +189,7 @@ if (exists("assignment2"))
     course.ids = c(
       'S-BIOG-077'         = !"D00Ga_{YY}C_issues"),
     course.urls = c(
-      'S-BIOG-077'         = "hhttps://classroom.github.com/a/FQZsycUG"),
+      'S-BIOG-077'         = "hhttps://classroom.github.com/a/..."),
     course.ends = c(
       'S-BIOG-025'         = !"{W[53]+5} 23:59:59",
       'S-BIOG-077'         = !"{W[53]+6} 23:59:59"),

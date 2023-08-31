@@ -4,8 +4,8 @@ learnitdown <- list(
   imgbaseurl =
     "https://filedn.com/lzGVgfOGxb6mHFQcRn9ueUb/sdd-umons3", # The base URL for external (big) images
   shiny_imgdir = "images/shinyapps",   # The Shiny image directory (screenshots)
-  svbox = 2022,                        # The SciViews Box version used
-  rstudio = "start_rstudio2022.html",  # Run Rstudio from the box
+  svbox = 2023,                        # The SciViews Box version used
+  rstudio = "start_rstudio2023.html",  # Run Rstudio from the box
   package = "BioDataScience3",         # Associated package for the exercices
   institutions = "UMONS",              # Known institutions
   courses = c(
@@ -20,11 +20,11 @@ learnitdown <- list(
     # they are registered as UMONS students,
     "Science des Données Biologiques IV à l'UMONS"
   ),
-  acad_year = "2022-2023",               # The academic year
-  YY = 22,                               # The academic year short id
-  W = as.Date("2022-09-11") + (0:52)*7,  # Sundays before each academic week
-  Q1 = as.Date("2022-09-11") + (0:13)*7, # We consider 14 weeks from second one
-  Q2 = as.Date("2023-02-05") + c(0:7, 10:15)*7 # Q2 starts 07/02 w22 but w30-31 are holidays
+  acad_year = "2023-2024",               # The academic year
+  YY = 23,                               # The academic year short id
+  W = as.Date("2023-09-10") + (0:52)*7,  # Sundays before each academic week
+  Q1 = as.Date("2023-09-10") + (0:13)*7, # We consider 14 weeks from second one
+  Q2 = as.Date("2024-02-04") + c(0:7, 10:15)*7 # Q2 starts 04/02 w22 but w30-31 are holidays
 )
 
 # We use glue() often for variables replacement from learnitdown, so, we
@@ -40,7 +40,7 @@ learnitdown <- list(
 
 # Examples:
 #!"svbox{svbox} is for academic year {acad_year}"
-#  -> svbox2021 is for academic year 2021-2022
+#  -> svbox2023 is for academic year 2023-2024
 #microbenchmark::microbenchmark(!TRUE, .Primitive('!')(TRUE), .Primitive('!'))
 
 # Unary + binary + is nice too, but it slows down additions!
@@ -64,7 +64,7 @@ learnitdown <- list(
 #}
 # Examples:
 #+"svbox{svbox} is for academic year {acad_year}"
-#  -> svbox2021 is for academic year 2021-2022
+#  -> svbox2023 is for academic year 2023-2024
 #+"svbox{svbox}" + " is for" + " academic year {acad_year}"
 #  -> same result
 # With the new R 4.0 character strings syntax:
