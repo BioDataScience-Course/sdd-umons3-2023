@@ -22,9 +22,9 @@ learnitdown <- list(
   ),
   acad_year = "2023-2024",               # The academic year
   YY = 23,                               # The academic year short id
-  W = as.Date("2023-09-10") + (0:52)*7,  # Sundays before each academic week
-  Q1 = as.Date("2023-09-10") + (0:13)*7, # We consider 14 weeks from second one
-  Q2 = as.Date("2024-02-04") + c(0:7, 10:15)*7 # Q2 starts 04/02 w22 but w30-31 are holidays
+  W = as.Date("2023-09-10") + (0:37)*7,  # Sundays before each academic week
+  Q1 = as.Date("2023-09-10") + (0:15)*7, # There are 15 weeks at Q1
+  Q2 = as.Date("2024-02-04") + c(0:8, 11:16)*7 # Q2 starts 04/02 w22 but w30-31 are holidays
 )
 
 # We use glue() often for variables replacement from learnitdown, so, we
