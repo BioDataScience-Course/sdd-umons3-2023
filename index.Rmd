@@ -171,7 +171,7 @@ if (exists("assignment2"))
     course.ids = c(
       'S-BIOG-025'         = !"C00Ga_{YY}M_issues"),
     course.urls = c(
-      'S-BIOG-025'         = "https://classroom.github.com/a/..."),
+      'S-BIOG-025'         = "https://classroom.github.com/a/jeU2Nmo2"),
     course.ends = c(
       'S-BIOG-025'         = !"{W[53]+5} 23:59:59"),
     term = "", level = 0,
@@ -189,7 +189,7 @@ if (exists("assignment2"))
     course.ids = c(
       'S-BIOG-077'         = !"D00Ga_{YY}C_issues"),
     course.urls = c(
-      'S-BIOG-077'         = "hhttps://classroom.github.com/a/..."),
+      'S-BIOG-077'         = "https://classroom.github.com/a/z8glofPk"),
     course.ends = c(
       'S-BIOG-025'         = !"{W[53]+5} 23:59:59",
       'S-BIOG-077'         = !"{W[53]+6} 23:59:59"),
@@ -205,4 +205,12 @@ if (exists("assignment2"))
 
 Une fois que vous avez rejoint l'équipe **`r !"C{YY}"`**, il n'est plus nécessaire d'utiliser le lien GitHub Classroom vers ces issues. Vous pouvez retrouver directement les issues liées à ce dépôt via la bannière du site.
 
-![](images/00-preambule/issues.png)
+![](images/00-preambule/issues.png) \## Déroulement du cours {.unnumbered}
+
+Le cours de SDD III est divisé en 6 modules. Comme expliqué précédemment, les exercices et les projets de niveau 1 à 3 ont pour objectif de vous préparer aux exercices plus complexes. Vous réaliserez ces exercices dans chaque module de ce cours.
+
+Les projets de niveau 4, les challenges et les interrogations sont les activités qui contribuent le plus à votre note finale. Vous trouverez ci-dessous les modules qui comprennent ces activités.
+
+![](images/00-preambule/sdd3_q1_orga.drawio.png)
+
+Les informations données ci-dessus sont données à titre indicatif. Elles sont susceptibles d'évoluer au cours de l'année académique.
