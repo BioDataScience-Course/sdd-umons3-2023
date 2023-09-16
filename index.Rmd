@@ -162,7 +162,7 @@ Le plan du cours est une forme de contrat entre l'étudiant et les encadrants. C
 
 ## Issues {#issues .unnumbered}
 
-Toutes les questions relatives aux exercices sont à poser dans les issues GitHub dédiées à ce cours.
+Toutes les questions relatives aux exercices sont à poser dans les issues GitHub dédiées à ces cours.
 
 ```{r  assign_C00Ga_issues, echo=FALSE, results='asis'}
 if (exists("assignment2"))
@@ -173,7 +173,7 @@ if (exists("assignment2"))
     course.urls = c(
       'S-BIOG-025'         = "https://classroom.github.com/a/jeU2Nmo2"),
     course.ends = c(
-      'S-BIOG-025'         = !"{W[53]+5} 23:59:59"),
+      'S-BIOG-025'         = !"{W[15]+5} 23:59:59"),
     term = "", level = 0,
     toc = "Poser ses questions dans une issue.", n = 100,
     texts = learnitdown::assignment2_fr(
@@ -191,8 +191,8 @@ if (exists("assignment2"))
     course.urls = c(
       'S-BIOG-077'         = "https://classroom.github.com/a/z8glofPk"),
     course.ends = c(
-      'S-BIOG-025'         = !"{W[53]+5} 23:59:59",
-      'S-BIOG-077'         = !"{W[53]+6} 23:59:59"),
+      'S-BIOG-025'         = !"{W[15]+5} 23:59:59",
+      'S-BIOG-077'         = !"{W[15]+5} 23:59:59"),
     term = "", level = 0,
     toc = "Poser ses questions dans une issue.", n = 100,
     texts = learnitdown::assignment2_fr(
@@ -201,16 +201,38 @@ if (exists("assignment2"))
       alt = "Les issues ne sont pas accessibles aux \u00e9tudiants externes."))
 ```
 
-*Note : vos enseignants sont également accessibles par mail via [sdd\@sciviews.org](mailto:sdd@sciviews.org){.email}.*
+*Note : vos enseignants sont également accessibles par mail via [sdd\@sciviews.org](mailto:sdd@sciviews.org){.email}, mais uniquement si vos questions nécessitent un échange en privé, sinon, vous devez utiliser les issues.*
 
-Une fois que vous avez rejoint l'équipe **`r !"C{YY}"`**, il n'est plus nécessaire d'utiliser le lien GitHub Classroom vers ces issues. Vous pouvez retrouver directement les issues liées à ce dépôt via la bannière du site.
+Une fois que vous avez rejoint l'équipe **`r !"C{YY}"`** ou **`r !"D{YY}"`**, il n'est plus nécessaire d'utiliser le lien GitHub Classroom vers ces issues. Vous pouvez retrouver directement les issues liées à ce dépôt via la bannière du site.
 
-![](images/00-preambule/issues.png) \## Déroulement du cours {.unnumbered}
+![](images/00-preambule/issues.png)
 
-Le cours de SDD III est divisé en 6 modules. Comme expliqué précédemment, les exercices et les projets de niveau 1 à 3 ont pour objectif de vous préparer aux exercices plus complexes. Vous réaliserez ces exercices dans chaque module de ce cours.
+## Planning des séances {#temps .unnumbered}
 
-Les projets de niveau 4, les challenges et les interrogations sont les activités qui contribuent le plus à votre note finale. Vous trouverez ci-dessous les modules qui comprennent ces activités.
+| Module            | Préparation pour le ... | Fin N1-3         | Projet N4            | Challenge            | Interrogation        |
+|------------|------------|------------|------------|------------|------------|
+| *(install party)* | `r !"{W[4]+1}"`         |                  |                      |                      |                      |
+| 1 Classif. I      | `r !"{W[5]+1}"`         | `r !"{W[6]+1}"`  |                      |                      |                      |
+| 2 Classif. II     | `r !"{W[7]+1}"`         | `r !"{W[8]+1}"`  |                      |                      | **`r !"{W[7]+5}"`**  |
+| 3 Classif. III    | `r !"{W[9]+1}"`         | `r !"{W[10]+1}"` |                      | **`r !"{W[10]+3}"`** |                      |
+| 4 Chrono. I       | `r !"{W[11]+1}"`        | `r !"{W[12]+1}"` |                      |                      |                      |
+| 5 Chrono. II      | `r !"{W[13]+1}"`        | `r !"{W[14]+1}"` |                      |                      | **`r !"{W[13]+5}"`** |
+| 6 Spatial         | `r !"{W[15]+1}"`        | `r !"{W[15]+5}"` | **`r !"{W[15]+1}"`** |                      |                      |
 
-![](images/00-preambule/sdd3_q1_orga.drawio.png)
+: Dates importantes pour les activités de science des données biologiques III (à 23:59:59 pour les fins de projets N3 ou N4, à l'heure de la séance en présentiel pour les autres dates).
 
-Les informations données ci-dessus sont données à titre indicatif. Elles sont susceptibles d'évoluer au cours de l'année académique.
+-   La colonne **préparation pour le...** indique la date pour laquelle vous devez avoir préparé[^index-1] la *totalité* du chapitre correspondant du cours en ligne, y compris les exercices de niveaux 1 et 2 (H5P, learnr, shiny).
+
+-   Les **projets individuels** **de niveau 3** sont réalisés en présentiel. Vous ne pourrez les compléter efficacement que si vous avez bien préparé la matière. La date indiquée dans cette colonne correspond à la clôture des projets. Logiquement, vous devez avoir aussi terminé les exercices de niveaux 1 et 2 à ce moment-là.
+
+-   Les **projets de groupe** **de niveau 4** se font sur une plus longue durée et à cheval sur plusieurs modules. Étalez et répartissez le travail entre vous. Prévoyez le temps nécessaire pour *terminer* vos rapports avant la date de fin.
+
+-   Les **challenges** sont des exercices qui se font obligatoirement en séance sous forme de jeux, type compétition entre vous ou contre la montre. *Ils nécessitent d'être au point dans la manipulation du logiciel pour l'analyse de données biologiques en pratique.*
+
+-   Les **interrogations** sont des contrôles classiques en présentiel sur feuille de papier ou sur ordinateur et limités à 30, 45 ou 60 minutes. *Réussir implique que vous ayez assimilé toute la matière vue jusque là.* Prévoyez entre une demi et une journée et demi pour la révision avant cette date, selon votre rythme de travail.
+
+[^index-1]: Préparer la matière en classe inversée signifie que vous avez **étudié** ce que vous comprenez par vous-même et que vous avez **noté** vos questions relatives à ce que vous ne comprenez pas pour les poser en séance. Il ne s'agit pas *juste* de lire de manière distraite le syllabus !
+
+*Notez les dates clés dans vos agendas. Les informations ci-dessus sont données à titre indicatif pour vous permettre de plannifier votre travail. Elles pourraient toutefois légèrement évoluer au cours de l'année académique en fonction des impondérables.*
+
+Pour le cours de science des données biologiques IV, le travail se fait sur base de co-construction de savoir. Le planning est plus souple et défini de commun accord avec les étudiants qui se sont inscrit à cette UE.

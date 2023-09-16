@@ -59,19 +59,13 @@ En pratique, un compromis entre exactitude et temps de calcul nous mène à choi
 Appliquons cela tout de suite avec l'ADL sur nos manchots. Plus besoin de séparer le jeu de données en set d'apprentissage et de test indépendants. La fonction `cvpredict(, cv.k = ...)` va se charger de ce partitionnement selon l'approche décrite ci-dessus en `cv.k` étapes. Notre analyse s'écrit alors :
 
 ```{r, message=FALSE, results='hide'}
-SciViews::R("ml")
+SciViews::R("ml", lang = "fr")
 ```
 
 ```{r}
-# Importation et remaniement des données comme précédemment
-read("penguins", package = "palmerpenguins") %>.%
-  rename(.,
-    bill_length    = bill_length_mm,
-    bill_depth     = bill_depth_mm, 
-    flipper_length = flipper_length_mm,
-    body_mass      = body_mass_g) %>.%
-  select(., -year, -island, -sex) %>.%
-  drop_na(.) %->%
+# Importation et remainement des données (comme précédemment)
+penguins <- read("penguins", package = "palmerpenguins") %>.%
+  sdrop_na(.) ->
   penguins
 ```
 
@@ -164,30 +158,6 @@ Nous avons huit variables quantitatives (discrète comme `pregnant`, ou continue
 -   `mass` est en réalité l'IMC, indice de masse corporelle que vous connaissez bien (masse/ taille^2^), en kg/m^2^, un autre indice d'obésité couramment employé,
 -   `pedigree` est un indice de prédisposition au diabète établi en fonction des informations sur la famille (sans unités),
 -   `age` est l'âge de l'Amérindienne exprimé en années.
-
-En fonction de ces informations, nous pouvons labelliser notre jeu de données comme suit :
-
-```{r}
-pima <- labelise(pima,
-  label = list(
-    diabetes = "Diabète",
-    pregnant = "Grossesses",
-    glucose  = "Test glucose",
-    pressure = "Pression sanguine",
-    triceps  = "Gras au triceps",
-    insulin  = "Insuline",
-    mass     = "IMC",
-    pedigree = "Pedigree",
-    age      = "Âge"),
-  units = list(
-    pressure = "mm Hg",
-    triceps  = "mm",
-    insulin  = "µU/mL",
-    mass     = "kg/m^2",
-    age      = "années"
-  )
-)
-```
 
 Du point de vue du balancement des observations, nous avons ceci :
 

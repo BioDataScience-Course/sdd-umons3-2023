@@ -1,7 +1,7 @@
 # Classification supervisée III {#classif3}
 
 ```{r setup, results='hide', warning=FALSE, include=FALSE}
-SciViews::R("ml")
+SciViews::R("ml", lang = "fr")
 ```
 
 ##### Objectifs {.unnumbered}
@@ -49,9 +49,9 @@ Une première conséquence intéressante de ce que nous venons d'observer est qu
 Reprenons l'exemple de nos Amérindiens de la tribu Pima confrontés au diabète (en n'utilisant que les cas complets).
 
 ```{r}
-SciViews::R("ml")
+SciViews::R("ml", lang = "fr")
 pima <- read("PimaIndiansDiabetes2", package = "mlbench")
-pima1 %<-% drop_na(pima)
+pima1 <- sdrop_na(pima)
 table(pima1$diabetes)
 ```
 

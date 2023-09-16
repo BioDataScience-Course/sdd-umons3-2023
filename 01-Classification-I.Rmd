@@ -413,26 +413,7 @@ En quoi un nombre différent d'items dans chaque classe peut-il poser problème 
 2. Le point de référence pour définir si un classifieur est efficace dépend de la classe la plus abondante. Avec un plan balancé à deux classes, un classifieur qui classe correctement 70% des items fait 20% mieux que le classement au hasard. Par contre, si la classe la plus abondante représente 75% du set, il fera *moins bien* de 5% qu'un classement purement au hasard (sic !)
 ```
 
-On observe la présence de quelques données manquantes que nous supprimerons plus loin avant de faire notre analyse. Nous allons également renommer et donner un label à nos variables quantitatives (nos attributs).
-
-```{r}
-penguins %<-% rename(penguins, # %<-% pour collecter" le résultat d'une fonctions tidy!
-  bill_length = bill_length_mm,
-  bill_depth = bill_depth_mm, 
-  flipper_length = flipper_length_mm,
-  body_mass = body_mass_g)
-
-penguins <- labelise(penguins, 
-    label = list(
-      species = "Espèce", island = "Île", bill_length = "Longueur du bec",
-      bill_depth = "Épaisseur du bec", flipper_length = "Longueur des nageoires", 
-      body_mass = "Masse", sex = "Sexe", year = "Année de la mesure"),
-    units = list(
-      bill_length = "mm", bill_depth = "mm", flipper_length = "mm",
-      body_mass = "g"))
-```
-
-Nous nous intéressons uniquement pour l'instant aux variables explicatives numériques, et nous éliminons également les lignes du tableau qui contiennent des valeurs manquantes.
+On observe la présence de quelques données manquantes que nous supprimerons plus loin avant de faire notre analyse. Nous nous intéressons uniquement pour l'instant aux variables explicatives numériques, et nous éliminons également les lignes du tableau qui contiennent des valeurs manquantes.
 
 ```{r}
 penguins %>.%
