@@ -158,7 +158,7 @@ L'évaluation est **continue** tout au long de l'année. Il n'y a pas d'examen e
 
 Le plan du cours est une forme de contrat entre l'étudiant et les encadrants. Ce document structure les attentes de vos encadrants. Veuillez consulter ce document attentivement.
 
--   [Plan du cours de Science des données biologiques III : années 2023-2024](https://github.com/BioDataScience-Course/BioDataScience-Common/tree/2023-2024/docs/plan_de_cours/sdd3_plan_cours_2023-2024.md)
+-   [Plan du cours de Science des données biologiques III : années 2023-2024](https://github.com/BioDataScience-Course/BioDataScience-Common/tree/2023-2024/docs/plan_de_cours/sdd3_plan_cours_2023-2024.pdf)
 
 ## Issues {#issues .unnumbered}
 
