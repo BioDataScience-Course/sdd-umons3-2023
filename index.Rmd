@@ -144,12 +144,12 @@ Chaque type d'exercice est associé à un outil présenté dans le matériel pé
 
 ![](images/00-preambule/apprendre2.png)
 
-L'ensemble de vos réponses sont collectées et utilisées afin de construire la note finale. Il n'est donc plus nécessaire de passer un examen classique en session d'examen. Tous ces exercices prouvent que vous avez acquis ou non les acquis d'apprentissage de ce cours.
+Toutes vos réponses sont collectées et utilisées afin de construire la note finale. Il n'est donc plus nécessaire de passer un examen classique en session d'examen. Tous ces exercices prouvent que vous avez acquis ou non les acquis d'apprentissage de ce cours.
 
 Votre progression au sein des exercices de chaque module est mise à votre disposition à la fin de chaque module ou bien depuis Moodle.
 
 ```{block, type='warning'}
-Les notes des exercices plus faciles de niveau 1, 2 et 3 sont comptabilisés séparément des exercices plus difficiles de niveau 4 et des interrogations, avec une pondération également en faveur de ces derniers. **Votre objectif est donc de bien vous préparer et de réussir vos projets, challenges et interrogations en présentiel.** Les exercices faciles vous aident à bien vous préparer. **Faites les sérieusement, c'est dans votre intérêt.**
+Les notes des exercices plus faciles de niveau 1, 2 et 3 sont comptabilisées séparément des exercices plus difficiles de niveau 4, des challenges et des interrogations, avec une pondération également en faveur de ces derniers. **Votre objectif est donc de bien vous préparer et de réussir vos projets, challenges et interrogations en présentiel.** Les exercices faciles vous aident à bien vous préparer. **Faites les sérieusement, c'est dans votre intérêt.**
 
 L'évaluation est **continue** tout au long de l'année. Il n'y a pas d'examen en fin d'année et il n'y a pas moyen non plus de repasser un examen en seconde session. La présence aux séances est **obligatoire** pour cette raison et toute absence injustifiée vous coûtera un zéro pour la matière concernée.
 ```
@@ -206,6 +206,8 @@ if (exists("assignment2"))
 Une fois que vous avez rejoint l'équipe **`r !"C{YY}"`** ou **`r !"D{YY}"`**, il n'est plus nécessaire d'utiliser le lien GitHub Classroom vers ces issues. Vous pouvez retrouver directement les issues liées à ce dépôt via la bannière du site.
 
 ![](images/00-preambule/issues.png)
+
+Vous pouvez aussi directement créer une issue depuis RStudio. Voyez le fichier README.md dans le dépôt des issues pour les explications.
 
 ## Planning des séances {#temps .unnumbered}
 
