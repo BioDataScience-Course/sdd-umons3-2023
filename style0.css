@@ -1,5 +1,9 @@
 
 /* Bookdown formatting to slightly better match UMONS style */
+.book .book-body .page-wrapper .page-inner {
+  max-width: 810px !important;
+}
+
 .book .book-body .page-wrapper .page-inner section.normal a {
   color: #00abcc;
 }
