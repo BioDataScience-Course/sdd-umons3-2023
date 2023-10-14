@@ -489,7 +489,7 @@ Pour l'instant {mlearning} utilise les fonctions du package {randomForest} qui r
 
 ##### À vous de jouer ! {.unnumbered}
 
-`r learnr("C02Lb_ml2", title = "Validation croisée", toc = "K plus proches voisins, arbres et forêt aléatoire")`
+`r learnr("C02Lb_ml2", title = "K plus proches voisins, méthode par arbres et forêt aléatoire", toc = "K plus proches voisins, méthode par arbres et forêt aléatoire")`
 
 ## Optimisation et métriques
 
