@@ -487,6 +487,10 @@ Pour l'instant {mlearning} utilise les fonctions du package {randomForest} qui r
 
 `r h5p(189, height = 270, toc = "Les types d'algorithmes")`
 
+##### À vous de jouer ! {.unnumbered}
+
+`r learnr("C02Lb_ml2", title = "Validation croisée", toc = "K plus proches voisins, arbres et forêt aléatoire")`
+
 ## Optimisation et métriques
 
 Maintenant que vous avez découvert différents algorithmes de classification supervisée, que vous êtes capable d'utiliser la validation croisée et les matrices de confusion pour en dériver des métriques, vous avez les éléments nécessaires en main pour vous attaquer à l'optimisation de votre classifieur. La tâche n'est pas simple, car vous avez, en fait, de nombreux paramètres sur lesquels influer. C'est essentiellement par la pratique que vous allez "sentir" ce qui fonctionne bien ou moins bien. Il est cependant utile à ce stade de faire un bilan. Quels sont les moyens d'optimiser un classifieur ? Quelles métriques utiliser pour surveiller votre progression ? De combien devez-vous améliorer votre métrique pour considérer que le gain est appréciable ?
