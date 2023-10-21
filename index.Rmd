@@ -216,7 +216,7 @@ Vous pouvez aussi directement créer une issue depuis RStudio. Voyez le fichier 
 | *(install party)* | `r !"{W[4]+1}"`         |                  |                      |                      |                      |
 | 1 Classif. I      | `r !"{W[5]+1}"`         | `r !"{W[6]+1}"`  |                      |                      |                      |
 | 2 Classif. II     | `r !"{W[7]+1}"`         | `r !"{W[8]+1}"`  |                      |                      | **`r !"{W[7]+5}"`**  |
-| 3 Classif. III    | `r !"{W[9]+1}"`         | `r !"{W[10]+1}"` |                      | **`r !"{W[10]+3}"`** |                      |
+| 3 Classif. III    | `r !"{W[9]+1}"`         | `r !"{W[10]+1}"` |                      | **`r !"{W[9]+3}"`** |                      |
 | 4 Chrono. I       | `r !"{W[11]+1}"`        | `r !"{W[12]+1}"` |                      |                      |                      |
 | 5 Chrono. II      | `r !"{W[13]+1}"`        | `r !"{W[14]+1}"` |                      |                      | **`r !"{W[13]+5}"`** |
 | 6 Spatial         | `r !"{W[15]+1}"`        | `r !"{W[15]+5}"` | **`r !"{W[15]+1}"`** |                      |                      |

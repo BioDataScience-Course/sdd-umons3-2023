@@ -14,7 +14,7 @@ Vous devez être familiarisés avec l'écriture et la documentation de fonction 
 
 Vous devez également être familiarisés avec les tests unitaires.
 
-# Le package
+## Package R
 
 À chaque utilisation R, vous employez des fonctions sans plus y porter attention comme la fonction `labelise()` par exemple. Cette fonction provient du package {data.io}. Un package est un ensemble de fonctions documentées, de jeu de données, de vignettes (des tutoriels)... Vous pouvez très facilement retrouver des informations sur les packages que vous utilisez en cliquant sur l'onglet `Packages` dans RStudio. Vous y trouverez la liste des packages que vous avez installés sur votre ordinateur, une courte description et le numéro de la version de ce package. Nous reviendrons plus en détail sur le numéro de version lors de la création de votre premier package.
 
@@ -53,6 +53,7 @@ available::available(name= "nom_potentiel_du_package")
 - ...
 --->
 ```
+
 ##### Pour en savoir plus {.unnumbered}
 
 -   [Créer un package R en quelques minutes](https://thinkr.fr/creer-package-r-quelques-minutes/), courte explication sur la création d'un package R, en français.
