@@ -99,10 +99,10 @@ summary(penguins_conf, type = c("Recall", "Precision", "Fscore"), sort.by = "Rec
 
 Précédemment, nous avions 3,5% d'erreur, et maintenant, nous n'en avons plus que 1,2%. C'est normal que notre taux d'erreur baisse, car nos classifieurs par validation croisée utilisent 90% des données alors qu'auparavant, nous n'en utilisions que les 2/3. Les performances de nos classifieurs s'améliorent avec l'augmentation des données jusqu'à atteindre un palier. Il faut essayer de l'atteindre en pratique : s'il est possible d'ajouter plus de données, nous comparons avant-après, et si les performances s'améliorent, nous ajoutons encore plus de données jusqu'à atteindre le palier. Notez aussi que la quantité de données nécessaires dépend également de l'algorithme de classification. En général, plus il est complexe, plus il faudra de données. Pensez-y si vous en avez peu et utilisez alors préférentiellement des algorithmes plus simples comme ADL dans ce cas.
 
-Si nous voulons faire un "leave-one-out", nous ferions (sachant que nos données comptent `r nrow(penguins)` cas, nous indiquons ici `cv.k = 342`) :
+Si nous voulons faire un "leave-one-out", nous ferions (sachant que nos données comptent `r nrow(penguins)` cas, nous indiquons ici `cv.k = 333`) :
 
 ```{r}
-penguins_pred_loo <- cvpredict(penguins_lda, cv.k = 342)
+penguins_pred_loo <- cvpredict(penguins_lda, cv.k = 333)
 # Matrice de confusion
 penguins_conf_loo <- confusion(penguins_pred_loo, penguins$species)
 plot(penguins_conf_loo)
