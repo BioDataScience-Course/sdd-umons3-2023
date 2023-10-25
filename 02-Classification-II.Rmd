@@ -322,14 +322,14 @@ summary(pima2_lvq_conf, type = c("Fscore", "Recall", "Precision"))
 
 ##### À vous de jouer ! {.unnumbered}
 
-```{r assign_C02Ia_zooplankton, echo=FALSE, results='asis'}
+```{r assign_C02Ia_zoo, echo=FALSE, results='asis'}
 if (exists("assignment"))
-  assignment("C02Ia_zooplankton", part = NULL,
-    url = "https://github.com/BioDataScience-Course/C02Ia_zooplankton",
+  assignment("C02Ia_zoo", part = NULL,
+    url = "https://github.com/BioDataScience-Course/C02Ia_zoo",
     course.ids = c(
-      'S-BIOG-025'         = !"C02Ia_{YY}M_zooplankton"),
+      'S-BIOG-025'         = !"C02Ia_{YY}M_zoo"),
     course.urls = c(
-      'S-BIOG-025'         = "https://classroom.github.com/a/xJ578DZB"),
+      'S-BIOG-025'         = "https://classroom.github.com/a/IWJx_my2"),
     course.starts = c(
       'S-BIOG-025'         = !"{W[7]+1} 08:00:00"),
     course.ends = c(
