@@ -95,19 +95,82 @@ Nous pouvons aussi manipuler les **poids** des individus en les augmentant pour 
 Enfin, il existe des techniques d'augmentation du nombre d'items par classe via la synthèse de cas artificiels en se basant sur l'information contenue dans le tableau de départ. L'une des techniques les plus utilisées s'appelle "SMOTE". Ce [blog](https://towardsdatascience.com/stop-using-smote-to-treat-class-imbalance-take-this-intuitive-approach-instead-9cb822b8dc45) l'explique en même temps qu'il montre que cela peut être dangereux d'augmenter artificiellement le nombre d'items. Nous vous conseillons donc d'utiliser plutôt l'une des deux approches expliquées ci-dessus (réduction des classes abondantes ou surpondération, éventuellement en les dupliquant, des items des classes rares). Mais n'exagérez jamais trop dans la façon dont vous distordez les proportions par classes par rapport à la réalité, et gardez toujours à l'esprit que vos métriques sont alors biaisées de manière optimiste.
 ```
 
-Voici comment nous pouvons surpondérer les classes plus rares par duplication, dans le cas de notre jeu de données `pima1` :
+Voici comment nous pouvons surpondérer les classes plus rares par duplication, dans le cas de notre jeu de données `pima1`. Nous commençons par définir une fonction `over_undersample()` que vous pouvez réutiliser dans vos projets ou dans le challenge[^03-classification-iii-1]. Vous lui donnez le vecteur de classes dont il faut modifier les proportions. Vous donnez aussi un vecteur de pondérations (1 = garder tout, \< 1 = sous échantillonner la classe dans ces proportions, et \> 1 = suréchantillonner la classe). Une pondération de 2 signifie dupliquer tous les items dans la classe, par exemple. Si vous ne donnez pas de vecteur de pondération, la fonction homogénéisera les proportions dans toutes les classes automatiquement. Un argument `total=` indique la taille souhaitée du jeu de données rééchantillonné. Enfin, l'argument `min_warning` permettra d'imprimer un message d'avis si l'effectif d'un classe est inférieur à cette valeur (10 par défaut). Le résultat renvoyé doit être utilisé pour sélectionner les lignes du tableau (voir exemple d'application ci-dessous).
+
+[^03-classification-iii-1]: La fonction `over_undersample()` sera incluse dans la prochaine version du package {mlearning}, donc pour la SciViews Box 2024.
+
+```{r}
+over_undersample <- function(x, weights = NULL,
+    total = round(sum(weights * table(x))), min_warning = 10) {
+  stopifnot(is.factor(x))
+  levels_x <- levels(x)
+  nlevels <- length(levels_x)
+  stopifnot(nlevels >= 2)
+  # There may not be empty levels
+  table_x <- table(x)
+  if (any(table_x == 0))
+    stop("There may be no empty levels. Use droplevels() first?")
+  if (any(table_x < min_warning))
+    warning("Some levels have less than ", min_warning, " items.")
+  # Default value for weights = get evenly distributed classes
+  if (is.null(weights))
+    weights <- length(x) / table_x / nlevels
+  stopifnot(is.numeric(weights), length(weights) == nlevels)
+  stopifnot(length(total) == 1, is.numeric(total), total > 0)
+  # This is an error to generate less than min_warning * nlevels items
+  if (total < min_warning * nlevels)
+    stop("The total cannot be lower than min_warning * number of levels in x")
+  # times is the number of times each item must be multiplied to get the desired
+  # total number of items with the desired class distribution
+  times <- weights / sum(weights * table_x) * total
+  # For integer number of times, we replicate, but for fraction, we randomly
+  # subsample
+  # For the repetition, it is enough to use rep() with times[x] (times is
+  # truncated by rep). times[x] selects the number of times each item must be
+  # repeated, depending on its class, because the factor object internally
+  # stores the levels as integers
+  idx <- rep(1:length(x), times = times[x])
+  # For the fraction part of times, we need to subsample each level
+  frac <- times %% 1
+  split_x <- split(1:length(x), x)
+  for (i in 1:nlevels) {
+    level <- levels_x[i]
+    level_idx <- split_x[[level]]
+    split_x[[level]] <- sample(level_idx,
+      size = round(frac[[i]] * length(level_idx)))
+  }
+  # All indices are idx + unlisted split_x
+  structure(sort(c(idx, unname(unlist(split_x)))), times = times)
+}
+
+```
+
+Dans le cas du suréchantillonnage, on va dupliquer des items. Cela signifie que l'on ne peut pas diviser ensuite en set d'apprentissage et set de test, ni utiliser la validation croisée. Nous ne pouvons suréchantillonner **que le set d'apprentissage**, et nous devons nous assurer qu'aucun item dupliqué ne soit ensuite dispatché entre le set d'apprentissage et celui de test (sinon, on aura les *mêmes items* des deux côtés, ce qui interdit).
+
+```{r}
+# Séparer d'abord set d'apprentissage et set de test
+set.seed(9856)
+pima1_split <- initial_split(pima1, 2/3, strata = diabetes)
+# Récupération du set d'apprentissage
+pima1_train <- training(pima1_split)
+# Récupération du set de test
+pima1_test <- testing(pima1_split)
+table(pima1_train$diabetes) |> # Tableau mal balancé
+  tabularise() 
+```
+
+Ensuite, nous homogénéisons les classes en dupliquant les cas positifs, *mais uniquement dans le set d'apprentissage*.
 
 ```{r}
 # Pondération double pour les cas positifs en les dupliquant
-pima1 %>.%
-  sfilter(., diabetes == "pos") %>.% # Prendre les items de classe(s) rare(s)
-  sbind_rows(., pima1) -> # Les rajouter au tableau de départ = duplication
-  pima1c
-table(pima1c$diabetes) |> # Tableau mieux balancé sans perte
-  tabularise()
+resample_idx <- over_undersample(pima1_train$diabetes,
+  weights = c(neg = 1, pos = 2))
+pima1_train <- pima1_train[resample_idx, ]
+table(pima1_train$diabetes) |> # Tableau mieux balancé sans perte
+  tabularise() 
 ```
 
-Bien évidemment, si les classes sont extrêmement inégales en effectifs, nous pouvons réaliser les deux approches simultanément : séparer le tableau de départ en classes rares et classes abondantes. Effectuer un échantillonnage qui limite les items dans les classes abondantes. Dupliquer les items des classes rares ou les tripliquer. Fusionner les deux tableaux ainsi obtenus à l'aide de `bind_rows()` ou `sbind_rows()`.
+Bien évidemment, si les classes sont extrêmement inégales en effectifs, nous pouvons réaliser les deux approches simultanément : dupliquer, voire tripliquer les classes rares et sous-échantillonner les classes plus abondantes.
 
 ### Probabilités *a priori*
 
@@ -136,7 +199,7 @@ Nous voyons que les valeurs de rappels ne sont pas modifiées par cette correcti
 
 ##### À retenir {.unnumbered}
 
-Si vous êtes amené à modifier les proportions des différentes classes dans votre set d'apprentissage (pratique conseillée si les proportions sont trop différentes d'une classe à l'autre), n'oubliez pas de repondérer les calculs des métriques via `prior()` afin d'avoir des valeurs plus représentatives des performances de votre classifieur en situation. **Ne comparez jamais des métriques calculées avec des probabilités _a priori_ entre elles !**
+Si vous êtes amené à modifier les proportions des différentes classes dans votre set d'apprentissage (pratique conseillée si les proportions sont trop différentes d'une classe à l'autre), n'oubliez pas de repondérer les calculs des métriques via `prior()` afin d'avoir des valeurs plus représentatives des performances de votre classifieur en situation. **Ne comparez jamais des métriques calculées avec des probabilités *a priori* entre elles !**
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -151,7 +214,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-025'         = !"C03Ia_{YY}M_cardiovascular"),
     course.urls = c(
-      'S-BIOG-025'         = "https://classroom.github.com/a/..."),
+      'S-BIOG-025'         = "https://classroom.github.com/a/PbZWCAUY"),
     course.starts = c(
       'S-BIOG-025'         = !"{W[9]+1} 08:00:00"),
     course.ends = c(
@@ -394,6 +457,7 @@ Malheureusement, l'apprentissage profond nécessite une quantité importante de 
 
 Le jeu de données [MNIST](http://yann.lecun.com/exdb/mnist/) est un jeu de données ultra-classique et historique dans le développement de l'apprentissage profond. Il s'agit de plusieurs dizaines de milliers de chiffres manuscrits qui ont été numérisés. Le but est de créer un classifieur capable de reconnaître l'écriture manuscrite de nombres en reconnaissance, donc les chiffres de 0 à 9. La résolution de ce problème dans R est présentée [ici](https://tensorflow.rstudio.com/tutorials/beginners/). C'est un excellent point de départ si vous voulez vous lancer dans l'apprentissage profond. Dans le cadre de ce cours, nous n'irons cependant pas plus loin. Sachez toutefois que les meilleurs classifieurs en apprentissage profond sont actuellement capables de faire aussi bien, *voire mieux* dans la lecture de nombres en écriture manuscrite qu'un opérateur humain.
 
+```{=html}
 <!--{r assign_C02Ga_optimisation_II, echo=FALSE, results='asis'}
 if (exists("assignment2"))
   assignment2("C02Ga_optimisation", part = "II",
@@ -410,7 +474,7 @@ if (exists("assignment2"))
     toc = "Optimisation de classifieur",
     clone = TRUE)
 -->
-
+```
 ##### À vous de jouer ! {.unnumbered}
 
 `r learnr("C03Lb_ml3", title = "SVM et réseaux de neurones", toc = "SVM et réseaux de neurones")`
@@ -424,7 +488,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-025'         = !"C03Ia_{YY}M_cardiovascular"),
     course.urls = c(
-      'S-BIOG-025'         = "https://classroom.github.com/a/..."),
+      'S-BIOG-025'         = "https://classroom.github.com/a/PbZWCAUY"),
     course.starts = c(
       'S-BIOG-025'         = !"{W[9]+1} 08:00:00"),
     course.ends = c(
@@ -451,11 +515,11 @@ if (exists("challenge2"))
       'S-BIOG-025' = !"C03Ca_{YY}M_ml_wine",
       'sdd3late'   = !"C03Ca_{YY}M_ml_wine"),
     course.urls = c(
-      'S-BIOG-025' = "https://classroom.github.com/a/...",
-      'sdd3late'   = "https://classroom.github.com/a/..."),
+      'S-BIOG-025' = "https://classroom.github.com/a/Rejeo-A4",
+      'sdd3late'   = "https://classroom.github.com/a/Rejeo-A4"),
     course.starts = c(
-      'S-BIOG-025' = !"{W[9]+3} 13:00:00",
-      'sdd3late'   = !"{W[9]+3} 13:00:00"),
+      'S-BIOG-025' = !"{W[9]+3} 13:30:00",
+      'sdd3late'   = !"{W[9]+3} 13:30:00"),
     course.ends = c(
       'S-BIOG-025' = !"{W[9]+3} 18:00:00",
       'sdd3late'   = !"{W[9]+3} 18:00:00"),
