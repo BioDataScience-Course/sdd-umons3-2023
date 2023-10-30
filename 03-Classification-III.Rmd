@@ -24,13 +24,10 @@ Ce module constitue le troisième volet d'une trilogie consacrée à la classifi
 
 Ce problème nous ramène, en réalité à des calculs basiques de probabilités et au théorème de Bayes que nous avons abordés dans le [module 7 du premier cours de science des données biologiques](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/probabilit%25C3%25A9s.html). **Rappelez-vous, nous avions traité le cas du dépistage d'une maladie, dont le résultat dépendait du fait que la maladie est fréquente ou rare dans la population (sa prévalence)**. Si vous ne vous souvenez plus de quoi il s'agit, il peut être utile de relire maintenant les sections 7.1.1 à 7.1.3 de ce premier cours, car ce contenu s'applique parfaitement ici.
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(239, height = 270, toc = NULL)`
--->
-```
+`r h5p(239, height = 270, toc = "Dépistage d'une maladie rare")`
+
 Pour illustrer une nouvelle fois ce phénomène, prenons un cas extrême. Admettons que notre classifieur soit capable de discerner **sans aucune erreur** une classe parmi deux possibles, disons la classe A. Quel sera le rappel ? Ça, c'est facile, comme tous les individus A seront classés comme A par notre classifieur, nous n'aurons *aucun* faux négatif. Donc, le rappel qui est $TP / (TP + FN)$ vaudra toujours 1 ou 100%, et ce, quelles que soient les proportions relatives de A et de B dans notre échantillon. **En absence d'erreur, il n'y a pas d'ambiguïté ni de dépendance aux proportions relatives.**
 
 Par contre, calculons maintenant la précision pour A, si nous savons que notre même classifieur a tendance à classer 10% des individus B comme des A (faux positifs *FP*). La précision étant le rapport $TP / (TP + FP)$, interviennent ici ces faux positifs qui dépendent eux *de ce que notre classifieur est capable de faire par rapport à la classe B*. Dix pour cent de faux positifs, oui, mais sur combien d'items ? Prenons deux cas :
@@ -39,13 +36,10 @@ Par contre, calculons maintenant la précision pour A, si nous savons que notre 
 
 2.  Dans notre second cas, les proportions sont inversées. Nous avons 20% de A et 80% de B. Donc, les vrais positifs pour 100 individus seront de 20 (tous les A) et les faux positifs seront 10% de 80, soit 8. La précision devient donc $20 / (20 + 8)$, soit un tout petit peu plus de 71%.
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(240, height = 270, toc = NULL)`
--->
-```
+`r h5p(240, height = 270, toc = "Calcul de précision")`
+
 **Dans le second cas, la précision pour la classe A a diminué de manière très nette, rien qu'en changeant les proportions relatives de A et de B dans notre échantillon, les performances de notre classifieur n'ayant absolument pas été modifiées entre les deux situations.** Nous venons de démontrer que les métriques, dès qu'il y a la moindre erreur de classification possible, sont très sensibles aux proportions relatives des individus dans les classes. Notons que la diminution de la précision dans le cas (2) est liée à la fois à la diminution des vrais positifs (puisqu'il y a moins de A dans notre set), et à l'augmentation des faux positifs, qui dépendent eux de la quantité de B en augmentation. Notons que le raisonnement est symétrique. Donc, le rappel sera également impacté dès que le taux de classification correcte pour A devient inférieur à 100%.
 
 À l'extrême, il devient très difficile de classer correctement des items appartenant à des classes rares à cause de ce phénomène. En effet, si A ne représente plus que 1% de l'échantillon, nous aurons un seul vrai positif, et 10% de 99, soit pratiquement 10 faux positifs pour un lot de 100 individus. Donc, la précision pour A devient $1 / (1 + 10)$, soit 9% seulement. Nous verrons alors notre classifieur comme *très mauvais* à l'examen des items qu'il prétend être des A, et pour lesquels la grosse majorité ne le sera pas. Pourtant, il classe A sans aucune erreur et ne fait que 10% d'erreur pour B, ce qui, présenté de la sorte, passe pour un bon classifieur.
@@ -60,13 +54,10 @@ De plus, si les proportions relatives des items dans les classes diffèrent entr
 
 Une première conséquence intéressante de ce que nous venons d'observer est que les proportions relatives des items dans le *set d'apprentissage* vont conditionner le comportement de notre classifieur. Si nous voulons augmenter le rappel pour une classe, nous pouvons augmenter ses proportions de manière relative aux autres classes dans le set d'apprentissage. Mais si nous ne voulons pas perdre en précision, nous éviterons d'avoir des proportions trop déséquilibrées entre les classes. C'est pour cette raison qu'il est souvent conseillé de procéder à un ré-échantillonnage dans le but d'obtenir un effectif à peu près égal entre les différentes classes dans le set d'apprentissage. Par contre, changer les proportions de la sorte nous mène à une erreur globale plus grande en déploiement si les proportions initiales étaient représentatives de la "réalité terrain". Donc, à nous à définir au préalable quelle(s) métrique(s) --et quelle(s) classe(s)-- sont les plus importantes par rapport à nos objectifs. Dans le challenge, vous aurez à réfléchir à cette question !
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(241, height = 270, toc = NULL)`
--->
-```
+`r h5p(241, height = 270, toc = "Proportions et taux global de reconnaissance")`
+
 Reprenons l'exemple de nos Amérindiens de la tribu Pima confrontés au diabète (en n'utilisant que les cas complets).
 
 ```{r}
@@ -108,13 +99,10 @@ summary(pima1b_rf_conf)
 
 Le rappel pour la classe `pos` est monté de 60% (`pima1`) à 80% (`pima1b`). En première approche, nous devrions nous réjouir de ce résultat, d'autant plus que la précision semble être montée en même temps à presque 79% pour la même classe. Notre nouveau classifieur semble nettement plus efficace pour trouver les Indiennes diabétiques dans l'ensemble de la population. **Mais attention ! N'oublions jamais que les métriques sont sensibles aux proportions et que justement, nous venons de les "trafiquer".** À titre d'exercice, vous pouvez examiner l'effet d'un changement encore plus radical, par exemple, si vous prenez deux ou trois fois plus de cas positifs que négatifs dans votre set d'apprentissage.
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(242, height = 270, toc = NULL)`
--->
-```
+`r h5p(242, height = 270, toc = "Rappel avec proportions modifiées")`
+
 ```{block2, type = 'note'}
 Il existe plusieurs approches pour modifier les proportions relatives dans vos classes pour les sets de test et d'apprentissage. Celle que nous venons d'utiliser consiste à **réduire** le nombre d'items des classes les plus abondantes. Ici, nous comprenons intuitivement qu'une perte d'information n'est pas une bonne chose.
 
@@ -214,13 +202,10 @@ pima_prior
 Dans le cas où les probabilités *a priori* ne sont pas calculée à partir des données mais sont obtenues depuis la littérature, il suffit de créer un vecteur numerique avec `c()` en nommant les différentes probabilités du même nom que les niveaux de la variable facteur réponse. Par exemple, ici, notre variable réponse a les niveaux `neg` et `pos`. Si nous trouvons l'information que la prévalence du diabète dans cette population est de 13.5%, nous écrirons nos probabilités *a priori* comme `pima_prior <- c(neg = 0.865, pos = 0.135)`. La somme des probabilités doit être de un bien entendu.
 ```
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(243, height = 270, toc = NULL)`
--->
-```
+`r h5p(243, height = 270, toc = "Probabilités a priori et set d'apprentissage")`
+
 De nombreux algorithmes de classification peuvent nous renvoyer des probabilités d'appartenir à une classe (la prédiction de la classe n'est que celle qui a la probabilité la plus élevée, en réalité). L'arbre de probabilités (résolution graphique), ou un calcul simple de probabilités faisant intervenir le théorème de Bayes (résolution numérique) permet de combiner les probabilités *a priori* et les probabilités issues du classifieur pour calculer ce que nous appelons les **probabilités *a posteriori***, c'est-à-dire les probabilités d'être A ou B approchant les valeurs que nous observerons en déploiement de notre classifieur. Ce calcul nous l'avions déjà fait dans le [module 7 du cours I](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/probabilit%25C3%25A9s.html). Nous ne redéveloppons pas ces calculs ici. Encore une fois, vous êtes invité à relire cette section si vous ne vous en souvenez plus.
 
 Dans {mlearning}, les probabilités *a priori* peuvent être injectées dans l'objet **confusion** pour corriger nos métriques en faveur de valeurs plus réalistes relatives aux probabilités *a posteriori*. Donc, pour nos métriques obtenues à l'aide du set d'apprentissage `pima1b` aux proportions modifiées, nous rétablissons des valeurs plus plausibles par rapport à la population étudiée, et en même temps, plus comparables avec les métriques sur `pima1` en procédant comme suit :
@@ -268,13 +253,10 @@ Outre la variation des proportions relatives des individus dans le set d'apprent
 
 La **courbe ROC (pour "Receiver Operating Characteristic")** est une courbe qui représente le comportement de notre classifieur à deux classes pour tous les seuils de détection possibles. Si nous utilisons les probabilités d'appartenance à la classe cible renvoyées par notre classifieur au lieu des prédictions, nous pourrions choisir librement à partir de quelle probabilité nous considérons qu'un item est de cette classe. En prenant des seuils de 0 à 1 (ou 100%), nous balayons toutes les possibilités. À chaque seuil, nous pouvons calculer le taux de vrais positifs et le taux de faux positifs. La courbe ROC représente ces résultats avec le taux de faux positifs sur l'axe x et le taux de vrais positifs sur l'axe y. Pour illustrer cela, nous allons calculer la courbe ROC pour notre classifieur forêt aléatoire `pima1_rf`.
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(244, height = 270, toc = NULL)`
--->
-```
+`r h5p(244, height = 270, toc = "Courbe ROC")`
+
 Tout d'abord, il nous faut obtenir les "probabilités". Selon les algorithmes ce sont réellement des probabilités, ou alors, des nombres entre 0 et 1 qui ont des propriétés similaires. Dans le cas de la forêt aléatoire, c'est la proportion des arbres qui ont voté pour la classe. On parlera alors plus justement d'un nombre qui quantifie l'appartenance à la classe (*membership* en anglais), plutôt que de probabilités. Voici comment nous pouvons obtenir ces appartenances :
 
 ```{r}
@@ -382,13 +364,10 @@ Avec SVM, le choix du noyau et de ses paramètres est une étape cruciale pour o
 
 Bien qu'il ne semble pas évident au premier abord que SVM ne soit défini que pour un cas à deux classes seulement, c'est ainsi que les mathématiciens l'ont développée. Par contre, cette limitation peut être dépassée par une astuce simple : ramener les situations multiclasses à des cas à deux classes. Nous avons déjà observé, en effet, pour la matrice de confusion que nous pouvons toujours réduire un problème multiclasses à deux classes seulement dès lors que nous choisissons une classe cible. Nous calculons ensuite cette classe cible *versus* tout ce qui n'est pas de cette classe-là. Cette approche est dite "macro", par contraste avec l'approche "micro" ou les classes sont confrontées individuellement deux à deux.
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(245, height = 270, toc = NULL)`
--->
-```
+`r h5p(245, height = 270, toc = "SVM et nombre de classes")`
+
 Par exemple pour trois classes A, B, et C, dans l'approche "macro" nous comparerons A avec B + C en un classifieur unique pour décider si l'item appartient à A ou non. Dans l'approche "micro", nous comparerons A avec B d'un côté, puis A avec C d'un autre côté (deux classifieurs différents). Nous établirons ensuite un consensus entre ces deux classifieurs pour décider si l'item appartient à la classe A ou non. Ensuite dans les deux approches, nous faisons de même en ciblant cette fois-ci la classe B, et puis finalement la classe C. En rassemblant tous les résultats et en comparant les probabilités d'appartenance aux différentes classes renvoyées par les classifieurs individuels binaires, nous obtenons finalement un classifieur global multiclasse. C'est ainsi que SVM multiclasse fonctionne.
 
 ```{block2, type = 'info'}
