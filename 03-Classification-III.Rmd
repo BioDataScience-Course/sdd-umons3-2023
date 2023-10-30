@@ -268,6 +268,13 @@ Outre la variation des proportions relatives des individus dans le set d'apprent
 
 La **courbe ROC (pour "Receiver Operating Characteristic")** est une courbe qui représente le comportement de notre classifieur à deux classes pour tous les seuils de détection possibles. Si nous utilisons les probabilités d'appartenance à la classe cible renvoyées par notre classifieur au lieu des prédictions, nous pourrions choisir librement à partir de quelle probabilité nous considérons qu'un item est de cette classe. En prenant des seuils de 0 à 1 (ou 100%), nous balayons toutes les possibilités. À chaque seuil, nous pouvons calculer le taux de vrais positifs et le taux de faux positifs. La courbe ROC représente ces résultats avec le taux de faux positifs sur l'axe x et le taux de vrais positifs sur l'axe y. Pour illustrer cela, nous allons calculer la courbe ROC pour notre classifieur forêt aléatoire `pima1_rf`.
 
+```{=html}
+<!-- H5P en cours de validation
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(244, height = 270, toc = NULL)`
+-->
+```
 Tout d'abord, il nous faut obtenir les "probabilités". Selon les algorithmes ce sont réellement des probabilités, ou alors, des nombres entre 0 et 1 qui ont des propriétés similaires. Dans le cas de la forêt aléatoire, c'est la proportion des arbres qui ont voté pour la classe. On parlera alors plus justement d'un nombre qui quantifie l'appartenance à la classe (*membership* en anglais), plutôt que de probabilités. Voici comment nous pouvons obtenir ces appartenances :
 
 ```{r}
@@ -375,6 +382,13 @@ Avec SVM, le choix du noyau et de ses paramètres est une étape cruciale pour o
 
 Bien qu'il ne semble pas évident au premier abord que SVM ne soit défini que pour un cas à deux classes seulement, c'est ainsi que les mathématiciens l'ont développée. Par contre, cette limitation peut être dépassée par une astuce simple : ramener les situations multiclasses à des cas à deux classes. Nous avons déjà observé, en effet, pour la matrice de confusion que nous pouvons toujours réduire un problème multiclasses à deux classes seulement dès lors que nous choisissons une classe cible. Nous calculons ensuite cette classe cible *versus* tout ce qui n'est pas de cette classe-là. Cette approche est dite "macro", par contraste avec l'approche "micro" ou les classes sont confrontées individuellement deux à deux.
 
+```{=html}
+<!-- H5P en cours de validation
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(245, height = 270, toc = NULL)`
+-->
+```
 Par exemple pour trois classes A, B, et C, dans l'approche "macro" nous comparerons A avec B + C en un classifieur unique pour décider si l'item appartient à A ou non. Dans l'approche "micro", nous comparerons A avec B d'un côté, puis A avec C d'un autre côté (deux classifieurs différents). Nous établirons ensuite un consensus entre ces deux classifieurs pour décider si l'item appartient à la classe A ou non. Ensuite dans les deux approches, nous faisons de même en ciblant cette fois-ci la classe B, et puis finalement la classe C. En rassemblant tous les résultats et en comparant les probabilités d'appartenance aux différentes classes renvoyées par les classifieurs individuels binaires, nous obtenons finalement un classifieur global multiclasse. C'est ainsi que SVM multiclasse fonctionne.
 
 ```{block2, type = 'info'}
