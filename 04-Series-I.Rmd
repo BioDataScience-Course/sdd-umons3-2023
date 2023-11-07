@@ -359,6 +359,13 @@ Comme nous l'avons déjà vu, le graphe de base (obtenu par `plot()` ou en utili
 
 Les descripteurs statistiques tels que la moyenne, la médiane, l'écart type, etc. restent utiles pour les séries temporelles. Par contre, la valeur de ces descripteurs est susceptible de varier au cours du temps, et cette variation donne des indications utiles sur les mécanismes biologiques sous-jacents (par exemple, des fluctuations, des changements brutaux de régimes, etc.). Il nous faut donc calculer ces descripteurs pour des intervalles de temps précis le long de l'axe temporel de notre série. Les **statistiques glissantes** (*sliding statistics* en anglais) correspondent précisément à l'analyse de blocs successifs de données suivant un axe spatio-temporel. Dans {pastecs}, elles se calculent à l'aide de la fonction `stat.slide()`.
 
+```{=html}
+<!-- En cours de validation 
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(249, height = 270, toc = "Statistiques glissantes")`
+-->
+```
 ##### Exemple {.unnumbered}
 
 Nous reprenons ici l'exemple du manuel de {pastecs}. On peut calculer des statistiques glissantes pour la série `ClausocalanusA` de `marbio` par groupes de 10 stations, les imprimer et faire un graphique de la "moyenne glissante" à l'aide des instructions suivantes :
@@ -410,6 +417,13 @@ statsl2$xcut
 
 ##### À vous de jouer ! {.unnumbered}
 
+```{=html}
+<!-- En cours de validation 
+`r h5p(250, height = 270, toc = "Arguments de stat.slide()")`
+-->
+```
+##### À vous de jouer ! {.unnumbered}
+
 `r learnr("C04La_ts_intro", title = "Introduction aux séries chronologiques", toc = "Introduction aux séries chronologiques")`
 
 ### Manipulations de **ts**
@@ -448,6 +462,13 @@ tser.cycle
 boxplot(split(tser, tser.cycle), names = month.abb, col = "cornsilk")
 ```
 
+```{=html}
+<!-- En cours de validation 
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(251, height = 270, toc = "Début d'une série")`
+-->
+```
 Une autre manipulation courante de l'axe temporel consiste à **agréger** les données en des pas de temps plus longs. `aggregate()` permet de réduire le nombre d'observations en diminuant la fréquence. Par exemple pour transformer la série `tser` qui a un pas de temps d'un mois en une série de pas de temps d'un trimestre, en calculant des **moyennes trimestrielles**, nous ferons (puisqu'il y a quatre trimestres dans une année, nous indiquons 4 ici) :
 
 ```{r}
@@ -464,6 +485,13 @@ window(tser, start = c(1999, 1), end = c(2001, 12))
 
 La fonction `stats::lag()` permet de décaler la série en arrière dans le temps (ou en avant si on fournit une valeur de décalage négative) ; nous l'avons déjà utilisée plus haut. La fonction `diff()` calcule la différence entre une série et elle-même décalée dans le temps de *k* observations. Les fonctions `ts.intersect()` et `ts.union()` permettent de réunir deux ou plusieurs séries au sein d'une même matrice multivariée, avec une échelle de temps commune. Les fréquences respectives des séries à assembler doivent être identiques. Là où `ts.intersect()` retient uniquement l'intervalle de temps commun à toutes les séries, `ts.union()` conservera l'ensemble de l'intervalle temporel, toutes séries confondues.
 
+```{=html}
+<!-- En cours de validation 
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(252, height = 270, toc = "Réduction de séries")`
+-->
+```
 ##### Exercez-vous ! {.unnumbered}
 
 Manipulez et décrivez les différentes séries en exemples. Notez par exemple que `EEG` est constituée de mesures effectuées à un rythme de 256 par seconde, mais que l'axe du temps reprend simplement les observations les unes après les autres (ou si vous préférez, une "unité" de temps de 1/256 sec et une fréquence de 1). Comment feriez-vous pour transformer cette série avec une unité de temps de la seconde ? Ou de la milliseconde ?
@@ -514,6 +542,13 @@ ccf(mtser[, 1], mtser[, 2])
 
 On retrouve bien une cross-corrélation maximale pour un décalage de cinq entre la série de départ (`mtser[, 1]`) et la série décalée (`mtser[, 2]`) : à partir du zéro, c'est la cinquième barre vers la droite qui est la plus élevée. Nous retrouvons également l'alternance entre corrélation positive et négative caractéristique de signaux cycliques sur ce graphique.
 
+```{=html}
+<!-- En cours de validation 
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(253, height = 270, toc = "Autocorrélation de séries")`
+-->
+```
 ##### Exercez-vous {.unnumbered}
 
 Si vous voulez affiner votre compréhension du graphique de l'autocorrélation, générez et examinez ces graphiques pour nos différentes séries d'exemples. Les séries `lynx` et `co2` doivent certainement présenter une variation périodique claire, mais pour `co2`, une tendance générale forte se superpose. Les autres séries sont moins claires sur le graphique obtenu avec `plot()`... que pouvez-vous observer sur le graphique de l'autocorrélation ?
@@ -601,6 +636,13 @@ L'analyse spectrale ne peut se faire que sur une série qui ne présente *pas* d
 Parmi nos séries d'exemples, `co2` présente une tendance générale croissante très marquée. Cette série ne peut donc pas être analysées à l'aide de `spectrum()` ou `cpgram()` telle quelle. Nous devons d'abord la stationnariser, donc éliminer sa tendance générale.
 ```
 
+```{=html}
+<!-- En cours de validation 
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(254, height = 270, toc = "Analyse spectrale d'une série")`
+-->
+```
 #### Analyse spectrale croisée
 
 ```{block2, type = 'info'}
@@ -655,6 +697,13 @@ La **tendance** générale (*general trend*, en anglais) représente une variati
 
 Selon l'objet de l'étude entreprise, il peut être tout à la fois aussi important de l'estimer que de l'éliminer. L'estimer, car elle représente la trace la plus évidente et interprétable de l'évolution dans le temps. L'ôter (c'est-à-dire, **stationnariser** la série), car la part de variance qui lui est attachée est souvent si forte qu'elle peut masquer les autres composantes du signal : cycle long, saison, phénomène de haute fréquence. Les méthodes qui servent à l'estimer ou à l'éliminer font partie des techniques de décomposition des séries spatio-temporelles qui seront étudiées dans le module suivant. Ici, nous nous contenterons de tester son existence.
 
+```{=html}
+<!-- En cours de validation 
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(254, height = 270, toc = "Tendance générale")`
+-->
+```
 Il est possible de tester de manière non paramétrique l'existence d'une tendance. Si nous calculons une corrélation linéaire entre les valeurs successives d'un processus et les dates d'observations (définies par une suite d'entiers croissants), on va pouvoir tester si la tendance générale est significativement linéaire, croissante ou décroissante. Cependant, la tendance générale peut être présente et ne pas correspondre à une droite. C'est pourquoi, pour tester l'existence d'une tendance de forme quelconque, on va remplacer les valeurs observées par leurs *rangs*, puis calculer leur **corrélation non paramétrique de Spearman** $\rho$ avec le temps.
 
 Les valeurs du coefficient de Spearman sont comprises entre -1 et +1. Si la série est purement aléatoire, la valeur de $\rho$ tend vers zéro et sa variance est égale à 1/(*n*-1). Un test d'hypothèse existe pour déterminer si un coefficient de corrélation est significativement différent de zéro ou non. Nous pouvons réutiliser ce test, mais dans le cas présent, les hypothèses testées sont : $H_0:$ pas de tendance générale et $H_1:$ tendance générale présente.
@@ -855,6 +904,7 @@ Si vous avez affaire à un objet **mts**, n'oubliez pas d'extraire la série que
 
 `r learnr("C04Lb_ts_analysis", title = "Analyse des séries chronologiques", toc = "Analyse des séries chronologiques")`
 
+```{=html}
 <!--{r assign_C04Ga_ts_cheatsheet, echo=FALSE, results='asis'}
 if (exists("assignment2"))
   assignment2("C04Ga_ts_cheatsheet", part = "I",
@@ -871,7 +921,7 @@ if (exists("assignment2"))
     toc = "Aide-mémoire sur les séries chronologiques",
     clone = TRUE)
 -->
-
+```
 ##### Exercez-vous {.unnumbered}
 
 Appliquez la technique des sommes cumulées sur les diverses séries d'exemples pour vous familiariser avec son utilisation, en particulier la partie interactive avec `identify()` dans la console R de RStudio :
