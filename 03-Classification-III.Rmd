@@ -536,8 +536,8 @@ Vous avez dû apprendre beaucoup de techniques complémentaires pour arriver à 
 ##### À vous de jouer ! {.unnumbered}
 
 ```{r assign_C03Ca_ml_wine, echo=FALSE, results='asis'}
-if (exists("challenge2"))
-  challenge2("C03Ca_ml_wine", part = NULL,
+if (exists("challenge"))
+  challenge("C03Ca_ml_wine", part = NULL,
     url = "https://github.com/BioDataScience-Course/C03Ca_ml_wine",
     course.ids = c(
       'S-BIOG-025' = !"C03Ca_{YY}M_ml_wine",
@@ -551,7 +551,7 @@ if (exists("challenge2"))
     course.ends = c(
       'S-BIOG-025' = !"{W[9]+3} 18:00:00",
       'sdd3late'   = !"{W[9]+3} 18:00:00"),
-    level = 4, n = 2,
+    level = 4, n = 1,
     toc = "Challenge machine learning (vins)")
 ```
 
