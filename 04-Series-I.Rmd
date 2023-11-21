@@ -879,9 +879,12 @@ Nous avons identifié deux phases. La première commence à la première observa
 
 Si vous avez affaire à un objet **mts**, n'oubliez pas d'extraire la série que vous voulez traiter avec `local.trend()` à l'aide de l'opérateur `[,]`.
 
+<!--
 ##### À vous de jouer ! {.unnumbered}
 
-`r learnr("C04Lb_ts_analysis", title = "Analyse des séries chronologiques", toc = "Analyse des séries chronologiques")`
+TODO: ce learnr doit encore être écrit !
+r learnr("C04Lb_ts_analysis", title = "Analyse des séries chronologiques", toc = "Analyse des séries chronologiques")
+-->
 
 ```{=html}
 <!--{r assign_C04Ga_ts_cheatsheet, echo=FALSE, results='asis'}

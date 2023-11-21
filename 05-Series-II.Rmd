@@ -1,12 +1,12 @@
 # Séries chronologiques II {#series2}
 
 ```{r setup, results='hide', warning=FALSE, include=FALSE}
-SciViews::R("ts")
+SciViews::R("ts", lang = "fr")
 ```
 
 ##### Objectifs {.unnumbered}
 
--   Pouvoir reconnaître les séries temporelles constituées d'addition de signaux élémentaires (modèle additif), ou de leur multiplication (modèle multiplicatif).
+-   Pouvoir reconnaître les séries temporelles constituées d'additions de signaux élémentaires (modèle additif), ou de leur multiplications (modèle multiplicatif).
 
 -   Maîtriser les principales manières de filtrer un signal spatio-temporel pour en extraire une caractéristique particulière.
 
@@ -16,13 +16,13 @@ SciViews::R("ts")
 
 ##### Prérequis {.unnumbered}
 
-Ce module nécessite que vous maîtrisiez parfaitement toutes les notions et techniques abordées dans le précédent module.
+Ce module nécessite que vous maîtrisiez parfaitement toutes les notions et techniques abordées dans le précédent module concernant la manipulation et la description de séries chronologiques.
 
 ## Décomposition de séries
 
-Toutes les techniques présentées dans cette partie ont pour but de décomposer des séries spatio-temporelles régulières (donc, à pas de temps constant et sans trous) en deux ou plusieurs composantes. On extrait soit une composante issue d'un filtrage ou d'un lissage, ou alors correspondant à un modèle (variation cyclique, tendance linéaire, polynomiale, exponentielle, etc. ...). Quel que soit le nombre de composantes obtenues, la dernière est toujours le résidu (*residuals* en anglais), c'est-à-dire, la fraction de la série initiale (*series*) qui ne se retrouve dans aucune des autres composantes (*components*) extraites.
+Toutes les techniques présentées dans cette partie ont pour but de décomposer des séries spatio-temporelles régulières (donc, à pas de temps constant et sans trous) en deux ou plusieurs composantes. On extrait soit une composante issue d'un filtrage ou d'un lissage, ou alors correspondant à un modèle (variation cyclique, tendance linéaire, polynomiale, exponentielle, etc ...). Quel que soit le nombre de composantes obtenues, la dernière est toujours le résidu (*residuals* en anglais), c'est-à-dire, la fraction de la série initiale (*series*) qui ne se retrouve dans aucune des autres composantes (*components*) extraites.
 
-Pour un **modèle additif**, si nous extrayons par exemple deux composantes, on aura :
+Pour un **modèle additif**, on aura :
 
 **series** = **component1** + **component2** + ... + **residuals**
 
@@ -52,7 +52,7 @@ plot(time, trend2 * cycle2, type = "l", xlab = "Temps", ylab = "Série multiplic
 
 ### Fonction générale de décomposition
 
-Dans {pastecs}, toutes les techniques de décomposition de série fonctionnent selon le même canevas et renvoient toutes un objet **tsd** (*time series decomposition*). Cet objet contient à la fois les composantes de la ou des séries qui ont été décomposées, des informations sur la méthode utilisée, ainsi que des données supplémentaires qui servent au diagnostic du traitement réalisé.
+Dans {pastecs}, toutes les techniques de décomposition de séries fonctionnent selon le même canevas et renvoient toutes un objet **tsd** (*time series decomposition*). Cet objet contient à la fois les composantes de la ou des séries qui ont été décomposées, des informations sur la méthode utilisée, ainsi que des données supplémentaires qui servent au diagnostic du traitement réalisé.
 
 La fonction centrale qui effectue le traitement sur une ou plusieurs séries et renvoie un objet **tsd** est `tsd()`. Son argument `method=` permet de sélectionner une méthode de traitement à appliquer à toutes les séries à décomposer. Son argument `type=` indique si le modèle est additif ou multiplicatif. Cette fonction appelle d'autres fonctions plus simples `decxxx()` où `xxx` est le nom de la méthode (ex. : `decmedian()` pour la méthode des médianes mobiles, par exemple, que nous étudierons plus loin). Les fonctions `decxxx()` ne peuvent traiter qu'une série à la fois, et ne sont normalement pas appelées directement par l'utilisateur[^05-series-ii-1].
 
@@ -83,7 +83,7 @@ co2_dec <- tsd(co2, method = "average", type = "additive", order = 6, times = 3)
 plot(co2_dec, col = 1:3)
 ```
 
-Nous verrons plus loin ce que `order=` et `times=` veut dire. À noter que `type = "additive"` est la valeur par défaut et peut donc être omise ici. La méthode `plot()` est ensuite utilisée sur l'objet résultant (ici en utilisant les couleurs de la palette par défaut, 1 = noir, 2 = rouge et 3 = vert pour mettre en évidence les différentes séries). L'axe des abscisses numérote ici les observations par ordre croissant pour les retrouver facilement dans l'objet de départ si nécessaire. En haut sur le graphique, la série de départ en noir, au milieu en rouge, la série filtrée, et en bas en vert, les résidus qui contiennent entre autres le cycle.
+Nous verrons plus loin ce que `order=` et `times=` veulent dire. À noter que `type = "additive"` est la valeur par défaut et peut donc être omise ici. La méthode `plot()` est ensuite utilisée sur l'objet résultant (ici en utilisant les couleurs de la palette par défaut, 1 = noir, 2 = rouge et 3 = vert pour mettre en évidence les différentes séries). L'axe des abscisses numérote ici les observations par ordre croissant pour les retrouver facilement dans l'objet de départ si nécessaire. En haut sur le graphique, la série de départ en noir, au milieu en rouge, la série filtrée, et en bas en vert, les résidus qui contiennent entre autres le cycle.
 
 L'objet `co2_dec` est de classe **tsd**.
 
@@ -163,7 +163,7 @@ spectrum(co2_resid2, spans = c(5, 3))
 
 Ici, tout se passe comme si nous avions éliminé totalement tout signal de fréquence entière (1, 2, 3, ...) et qu'ensuite d'autres signaux apparaissent. Ce sont probablement des cycles fantômes issus du traitement... tout comme le cycle à fréquence deux observé plus haut reste discutable. **Gardez toujours votre esprit critique aiguisé en pareille situation !** Par exemple, quelle est l'étendue des signaux correspondants à nos trois composantes ? Pour la tendance, nous allons de 320 à 370 ppm, soit environ 50 ppm. Pour la composante saisonnière, l'amplitude du signal est de presque 3 ppm (le signal oscille entre 3 ppm et -3 ppm), soit une étendue de 6 ppm. Enfin, pour les résidus, l'échelle de l'axe s'étale de -0.6 à 0.4, soit 1 ppm, donc, une amplitude maximum de 0.5 ppm pour un éventuel cycle. Que peut-on encore extraire d'intéressant comme signal avec une si petite amplitude relative de presque un ordre de grandeur inférieur à l'amplitude du signal saisonnier qui, lui, est bien concret dans notre série ? Voilà le type de raisonnement logique que vous devez utiliser, au-delà de ce que les calculs vous montrent.
 
-```{block2, type = 'note'}
+```{block2, type='note'}
 Avec `tsd()` vous avez plusieurs méthodes de décomposition disponibles, même si nous n'en avons abordé jusqu'ici que deux. Avec `method=` :
 
 - `"average"` pour les moyennes mobiles,
@@ -188,7 +188,9 @@ Un problème se pose aux deux extrémités, car la fenêtre dépasse de la séri
 
 Dans le cas de la **moyenne mobile** (*moving average* en anglais), le calcul qui est réalisé à l'intérieur de la fenêtre est bien sûr la moyenne des observations qu'elle contient. Pour reprendre notre exemple avec *k* = 2, si nous appelons $M_t$ la moyenne mobile calculée qui remplace $X_t$ dans la série filtrée, nous aurons :
 
-$$M_t = \frac{X_{t-2} + X_{t-1} + X_t + X_{t+1} + X_{t+2}}{5}$$ et pour l'observation suivante :
+$$M_t = \frac{X_{t-2} + X_{t-1} + X_t + X_{t+1} + X_{t+2}}{5}$$
+
+et pour l'observation suivante :
 
 $$M_{t+1} = \frac{X_{t-1} + X_{t} + X_{t+1} + X_{t+2} + X_{t+3}}{5}$$
 
@@ -242,24 +244,6 @@ plot(lynx_mb)
 
 Mais ce faisant, nous avons *aussi* éliminé le cycle à 10 ans dans les résidus ! Rappelez-vous que la moyenne mobile filtre également des signaux de fréquences dont la bande de lissage est multiple, dont ici à 10 ans. Il nous reste alors une tendance générale qui diminue légèrement pour remonter ensuite. Donc, en travaillant avec les moyennes mobiles, nous devons cibler en premier les cycles de plus grande fréquence.
 
-##### À vous de jouer ! {.unnumbered}
-
-```{r assign_C05Ia_tsd, echo=FALSE, results='asis'}
-if (exists("assignment"))
-  assignment("C05Ia_tsd", part = NULL,
-    url = "https://github.com/BioDataScience-Course/C05Ia_tsd",
-    course.ids = c(
-      'S-BIOG-025'         = !"C05Ia_{YY}M_tsd"),
-    course.urls = c(
-      'S-BIOG-025'         = "https://classroom.github.com/a/..."),
-    course.starts = c(
-      'S-BIOG-025'         = !"{W[13]+1} 08:00:00"),
-    course.ends = c(
-      'S-BIOG-025'         = !"{W[13]+1} 11:00:00"),
-    term = "Q1", level = 3,
-    toc = "Décomposition d'une série spatio-temporelle")
-```
-
 ### Médianes mobiles
 
 Comme vous l'avez certainement deviné, les médianes mobiles fonctionnent comme les moyennes mobiles en baladant une fenêtre de largeur fixe le long de la série, mais cette fois-ci en calculant à chaque fois la médiane. Alors que la moyenne mobile s'exprime sous forme d'une somme de termes, ce qui l'associe à un modèle linéaire (on parle donc de filtrage linéaire), les médianes mobiles représentent par contre un *lissage non linéaire*. Il est possible de montrer que la répétition de cette opération conduit finalement à stabiliser le signal filtré. Cette courbe est caractérisée par une série de paliers successifs. Ainsi, la technique est utile pour *segmenter* une série, ce qui se rapproche des sommes cumulées pour détecter des transitions brusques dans la série (mais ici au lieu de les détecter, nous les mettons en évidence via le filtrage).
@@ -309,13 +293,17 @@ plot(fluo_smooth, stack = FALSE, resid = FALSE, col = 1:2,
 
 Les pics sont bien ici remplacés par des paliers.
 
+##### À vous de jouer ! {.unnumbered}
+
+`r learnr("C05La_ts_filter", title = "Filtrage de séries chronologiques", toc = "Filtrage de séries chronologiques")`
+
 ### Filtrage par différences
 
 La méthode des différences a pour but d'éliminer la tendance. Ce n'est valable que si la série a une tendance monotone et non en "dents de scie". Autrement dit, cela suppose que la série est autocorrélée positivement ou négativement.
 
 Nous allons ici récupérer l'opérateur retard $LX_t$ vu tout au début du module 4. Cet opérateur décale la série d'une ou plusieurs observations (argument `lag=`) par rapport à la série d'origine. La méthode des différences consiste à **soustraire** la série ainsi décalée par rapport à la série de départ. Naturellement, le filtrage peut être répété plusieurs fois pour en amplifier l'effet. Ce filtrage est également *linéaire*.
 
-À condition de ne pas avoir également un cycle important, le filtrage par différences est efficace pour **éliminer une tendance monotone croissante ou décroissante**, voire une tendance de forme quelconque, mais dont la courbure varie lentement (signal à très haute fréquence). Dans ce cas, la méthode est très efficace pour **stationnariser** une série.
+À condition de ne pas avoir également un cycle important, le filtrage par différences est efficace pour **éliminer une tendance monotone croissante ou décroissante**, voire une tendance de forme quelconque, mais dont la courbure varie lentement (signal à très haute fréquence). Dans ce cas, la méthode est très efficace pour **stationnariser** une série. Dans le cas de la superposition d'un cycle, on peut indiquer un décalage `lag=` d'un demi-cycle pour épargner au mieux le cycle dans le filtrage. Par exemple, pour un cycle annuel avec des mesures mensuelles, on pourra utiliser `lag = 6`.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -330,7 +318,7 @@ fluo_stat <- tsd(fluo, method = "diff", lag = 2, times = 1)
 plot(fluo_stat, xlab = "Transect Nice - Calvi (stations)")
 ```
 
-Malheureusement, en présence de cycles importants, la méthode n'est pas très efficace, même si le décalage est choisi pour coïncider avec le cycle. Ainsi pour `co2`, nous aurons :
+En présence de cycles importants, un choix judicieux du décalage `lag=` est indispensable pour préserver au mieux le cycle en question. Ainsi, pour `co2` avec un décalage mal choisi, nous aurons :
 
 ```{r}
 co2 <- read("co2", package = "datasets")
@@ -338,11 +326,18 @@ co2_stat <- tsd(co2, method = "diff", lag = 12, times = 1)
 plot(co2_stat)
 ```
 
-Comme nous pouvons le voir, la tendance a bien été éliminée, mais malheureusement, le cycle saisonnier est également passé à la trappe, et ce malgré notre précaution de faire coïncider le décalage (`lag=`) avec les fréquences du cycle. Les méthodes de décomposition de type LOESS ou l'ajustement d'un modèle sur la tendance par régression donnent souvent de meilleurs résultats pour estimer et éliminer une tendance à long terme. Cependant, le filtrage par les différences rend des services utiles lorsque la série est croissante ou décroissante avec du bruit blanc.
+On voit ici que le cycle est passé à la trappe dans les résidus. Par contre, avec `lag = 6`, nous en conservons une bonne partie tout de même.
+
+```{r}
+co2_stat2 <- tsd(co2, method = "diff", lag = 6, times = 1)
+plot(co2_stat2)
+```
+
+Ici, la série est stationnarisée, mais une bonne partie du cycle demeure dans la composante filtrée. Notez que les méthodes de décomposition de type LOESS ou l'ajustement d'un modèle sur la tendance par régression donnent souvent de meilleurs résultats pour estimer et éliminer une tendance à long terme. Cependant, le filtrage par les différences rend des services utiles, surtout lorsque la série est croissante ou décroissante avec du bruit blanc.
 
 ### Filtrage par les valeurs propres
 
-Le filtrage par les valeurs propres (*eigenvector filtering* en anglais, ou EVF en abrégé) consiste à décomposer le signal original de la série via une analyse en composantes principales. Nous parlons aussi d'Analyse en Composantes Principales de Processus ou ACPP. Le principe du calcul consiste à créer une matrice contenant la série initiale en dernière colonne et des colonnes supplémentaires avec des décalages successifs de cette série initiale d'un pas de temps toujours identique $\tau$ *m* fois pour former *m* + 1 colonnes au total. Naturellement, pour obtenir une matrice carrée, nous éliminons les premières et les dernières valeurs des différentes colonnes de la matrice jusqu'à réduire à un tableau rectangulaire sans valeurs manquantes. Cela nous donne une matrice *X* comme ceci :
+Le filtrage par les valeurs propres (*eigenvector filtering* en anglais, ou EVF en abrégé) consiste à décomposer le signal original de la série en utilisant une analyse en composantes principales. Nous parlons aussi d'Analyse en Composantes Principales de Processus ou ACPP. Le principe du calcul consiste à créer une matrice contenant la série initiale en dernière colonne et des colonnes supplémentaires avec des décalages successifs de cette série initiale d'un pas de temps toujours identique $\tau$ *m* fois pour former *m* + 1 colonnes au total. Naturellement, pour obtenir une matrice carrée, nous éliminons les premières et les dernières valeurs des différentes colonnes de la matrice jusqu'à réduire à un tableau rectangulaire sans valeurs manquantes. Cela nous donne une matrice *X* comme ceci :
 
 $$X = \begin{pmatrix}
 X_{1 + m \tau} & \cdots & X_{1 + 2 \tau} & X_{1 + \tau} & X_1 \\
@@ -353,7 +348,7 @@ X_n            & \cdots & X_{n - (m - 2) \tau} & X_{n - (m - 1) \tau} & X_{n - m
 \end{pmatrix}
 $$
 
-Notez que cette matrice fait penser au calcul réalisé pour déduire la fonction d'autocorrélation, comprenez qu'elle contient des informations relatives à l'autocorrélation de la série à des pas de temps croissants le long de ses lignes. Ensuite, nous traitons cette matrice comme si c'était un jeu de données multivarié via une ACP classique sans réduction (calcul sur base de la variance-covariance).
+Notez que cette matrice fait penser au calcul réalisé pour déduire la fonction d'autocorrélation, comprenez qu'elle contient des informations relatives à l'autocorrélation de la série à des pas de temps croissants le long de ses lignes. Ensuite, nous traitons cette matrice comme si c'était un jeu de données multivarié avec une ACP classique sans réduction (calcul sur base de la variance-covariance).
 
 La première composante principale capture le signal de plus forte variance et les composantes principales suivantes la compléteront avec des signaux de variance décroissante. Notez que ces signaux peuvent être de formes diverses : aussi bien des tendances plus ou moins monotones que des cycles ou d'autres structures. Le signal qui ressortira en première composante sera une tendance générale si la série est dominée par un tel signal. Elle sera un cycle si celui-ci est prépondérant.
 
@@ -361,7 +356,7 @@ Enfin, nous pouvons filtrer la série en choisissant de ne conserver que les *i*
 
 ##### Exemple {.unnumbered}
 
-Le cas du signal EEG est compliqué, car le signal (*a priori* de forme quelconque) est très bruité. Testons un filtrage par les vecteurs propres en ne conservant que la première composante principale.
+Le cas du signal EEG est compliqué, car le signal (*a priori* de forme quelconque) est très bruité. Testons un filtrage par les valeurs propres en ne conservant que la première composante principale.
 
 ```{r}
 eeg <- read("eeg", package = "TSA")
@@ -464,7 +459,7 @@ plot(density_poly3dec, stack = FALSE, resid = FALSE, col = c(1, 4),
   main = "Tendance polynomiale d'ordre 3")
 ```
 
-Il ne semble pas que le gain soit flagrant ici... peut-être du côté de la Corse (les stations de numéro le plus élevé), et encore. Testons à présent un modèle non linéaire. Par exemple, une courbe logistique. Le principe est le même, si ce n'est que nous utilisons ici la fonction `nls()` à la place de `lm()` et le modèle `SSfpl(..., A, B, xmid, scal)` pour le modèle logistique à quatre paramètres (voyez le module 4 du cours SDD II).
+Il ne semble pas que le gain soit flagrant ici... peut-être du côté de la Corse (les stations de numéro le plus élevé), et encore. Testons à présent un modèle non linéaire. Par exemple, une courbe logistique. Le principe est le même, si ce n'est que nous utilisons ici la fonction `nls()` à la place de `lm()` et lea fonction 'selfStart' `SSfpl(..., A, B, xmid, scal)` pour le modèle logistique à quatre paramètres (voyez le module 4 du cours SDD II).
 
 ```{r}
 density_logis <- nls(density_ts ~ SSfpl(t, A, B, xmid, scal))
@@ -488,7 +483,7 @@ plot(density_ano, xlab = "Stations", ylab = "Anomalies de densité [g/L]")
 
 #### Tendance cyclique
 
-La tendance générale est parfois liée à l'évidence à un cycle (annuel, lunaire, etc.). La régression sinusoïdale permet de tester statistiquement, et de définir un modèle de variation rigoureusement périodique. Naturellement, ce modèle doit être utilisé avec discernement. Ainsi, même si la variabilité saisonnière existe pour des abondances d'espèces, elle ne s'ajuste pas forcément à une sinusoïde si les amplitudes maximums sont décalées d'une année à l'autre, d'un mois ou plus. Et si alors on étudie les écarts entre les valeurs observés et le modèle, ceux-ci ne correspondent plus à une variabilité indépendante de la variation saisonnière. Ils ne représentent que l'inadéquation du modèle choisi, qui, lui, est strictement périodique.
+La tendance générale est parfois liée à l'évidence à un cycle (annuel, lunaire, etc.). La régression sinusoïdale permet de tester statistiquement, et de définir un modèle de variation rigoureusement périodique. Naturellement, ce modèle doit être utilisé avec discernement. Ainsi, même si la variabilité saisonnière existe pour des abondances d'espèces, sa variation annuelle ne correspond pas forcément à une sinusoïde si les amplitudes maximums sont décalées d'une année à l'autre, d'un mois ou plus. Et si alors on étudie les écarts entre les valeurs observés et le modèle, ceux-ci ne correspondent plus à une variabilité indépendante de la variation saisonnière. Ils ne représentent que l'inadéquation du modèle choisi, qui, lui, est strictement périodique.
 
 Grâce à une astuce, nous pouvons ajuster un modèle sinusoïdal à l'aide de la fonction `lm()` dans R. Il suffit de rendre l'équation linéaire par un changement de variables. Rappelez-vous que nous avons vu dans le précédent module qu'une sinusoïde correspond à l'équation suivante :
 
@@ -508,7 +503,7 @@ Cette dernière forme est assimilable à une régression multiple sur deux varia
 
 ##### Exemple {.unnumbered}
 
-Nous avons déjà ajusté un tel modèle dans le jeu de données `co2` plus haut, mais sans l'expliquer complètement. À présent que nous avons vu l'astuce de la substitution de variable dans la forme sinus/cosinus de l'équation de la courbe sinusoïdale, nous comprenons mieux comment nous avons procédé. Utilisons maintenant un modèle sinusoïdal pour estimer la variation de la température au château de Nottingham pendant 20 ans au 20^ème^siècle. Comme les températures sont enregistrées en °F, nous nous empressons de les convertir en °C (°C = (°F - 32) / 1.8).
+Nous avons déjà ajusté un tel modèle dans le jeu de données `co2` plus haut, mais sans l'expliquer complètement. À présent que nous avons vu l'astuce de la substitution de variable dans la forme sinus/cosinus de l'équation de la courbe sinusoïdale, nous comprenons mieux comment nous avons procédé. Utilisons maintenant un modèle sinusoïdal pour estimer la variation de la température au château de Nottingham pendant 20 ans au 20^e^ siècle. Comme les températures sont enregistrées en °F, nous nous empressons de les convertir en °C (°C = (°F - 32) / 1.8).
 
 ```{r}
 nottem <- read("nottem", package = "datasets")
@@ -532,13 +527,15 @@ plot(nottem_sindec, stack = FALSE, resid = FALSE, col = 1:2,
 
 Notre modèle sinusoïdal semble s'adapter relativement bien pour représenter les températures. Nous voyons immédiatement où se situent les années à étés plus chauds, et les hivers plus ou moins rigoureux. Nous pouvons naturellement extraire les composantes et les analyser plus avant (nous vous laissons cela comme exercice). Les résidus ici sont appelés anomalies de température par rapport au modèle choisi. Mais les météorologues préfèrent généralement utiliser dans ce cas les moyennes mensuelles des températures sur une longue période, par exemple 10 ans, ou même un siècle.
 
+
+
 ## Décomposition par LOESS
 
 LOESS (prononcez "LO-ESSE") est une méthode de régression polynomiale locale. Pour chaque valeur $X_t$ d'une série $X$, on va considérer les *k* voisins à gauche et à droite, éventuellement pondérés (par exemple par la distance les séparant de $X_t$). On effectue une régression par les moindres carrés d'un polynôme d'ordre *p* (habituellement *p* vaut 1 ou 2), et on récupère la valeur prédite au temps $t$ (voir Cleveland *et al*, 1992). Il s'agit donc de l'utilisation d'une régression polynomiale dans une fenêtre mobile. Si l'ordre *p* du polynôme vaut 0, le calcul se ramène à une moyenne mobile classique.
 
 Avec un choix judicieux de *k*, et éventuellement en réitérant le processus, on va pouvoir extraire la tendance générale. Comme avec la méthode des moyennes mobiles, on va aussi pouvoir désaisonnaliser une série en prenant une fenêtre égale à un an, donc, en considérant 12 termes pour des données mensuelles (13 en fait pour une fenêtre centrée sur les observations de la série). Une combinaison de ces deux traitements va permettre de décomposer une série en tendance, cycle saisonnier et résidus selon un modèle additif. On peut aussi n'extraire que le cycle saisonnier et les résidus (surtout utile lorsque la tendance générale *est* périodique sur un an).
 
-Comme les résidus ont rarement une distribution normale et ne sont souvent pas indépendants entre eux dans les séries, les hypothèses de base indispensables pour la régression à l'aide de la méthode des moindres carrés sont violées la plupart du temps. Ainsi, pour obtenir une estimation plus exacte des composantes, il est possible d'utiliser une méthode de régression plus robuste (*i.e.*, moins sensible à la violation de ces hypothèses de base). On peut par exemple décider de pondérer les valeurs de manière inversement proportionnelle à leur influence respective sur la régression. Ainsi, une valeur qui, à elle seule, aurait tendance à tirer la courbe vers elle (valeur isolée, très éloignée du nuage formé par toutes les autres) recevra une pondération très faible afin de minimiser son effet.
+Comme les résidus ont rarement une distribution Normale et ne sont souvent pas indépendants entre eux dans les séries, les conditions de départ indispensables pour la régression à l'aide de la méthode des moindres carrés sont violées la plupart du temps. Ainsi, pour obtenir une estimation plus exacte des composantes, il est possible d'utiliser une méthode de régression plus robuste (*i.e.*, moins sensible à la violation de ces conditions d'application). On peut par exemple décider de pondérer les valeurs de manière inversement proportionnelle à leur influence respective sur la régression. Ainsi, une valeur qui, à elle seule, aurait tendance à tirer la courbe vers elle (valeur isolée, très éloignée du nuage formé par toutes les autres) recevra une pondération très faible afin de minimiser son effet.
 
 L'algorithme implémenté dans `decloess()` ou `tsd(method = "loess")`, lui-même implémenté dans `stl()` est en réalité un peu plus complexe, avec des passages multiples des différents filtres dans un ordre particulier, et avec un calcul supplémentaire éventuellement entre ces passages. Ceci explique que la méthode est plus efficace qu'une simple moyenne mobile. Cependant, les explications ci-dessus suffisent pour en comprendre le principe général. Si vous êtes intéressés par les détails, vous pouvez lire la page d'aide de `?stl`.
 
@@ -595,7 +592,9 @@ Enfin, terminons en signalant que si la méthode est prévue pour traiter unique
 
 ##### À vous de jouer ! {.unnumbered}
 
-```{r assign_C04Ga_ts_cheatsheet, echo=FALSE, results='asis'}
+`r learnr("C05Lb_ts_decomp", title = "Décomposition de séries chronologiques", toc = "Décomposition de séries chronologiques")`
+
+<!--{r assign_C04Ga_ts_cheatsheet, echo=FALSE, results='asis'}
 if (exists("assignment2"))
   assignment2("C04Ga_ts_cheatsheet", part = "II",
     url = "https://github.com/BioDataScience-Course/C04Ga_ts_cheatsheet",
@@ -609,9 +608,28 @@ if (exists("assignment2"))
       'S-BIOG-025'         = !"{W[13]+5} 23:59:59"),
     term = "Q1", level = 3,
     toc = "Aide-mémoire sur les séries chronologiques (suite)")
+-->
+
+##### À vous de jouer ! {.unnumbered}
+
+```{r assign_C05Ia_tsd, echo=FALSE, results='asis'}
+if (exists("assignment"))
+  assignment("C05Ia_tsd", part = NULL,
+    url = "https://github.com/BioDataScience-Course/C05Ia_tsd",
+    course.ids = c(
+      'S-BIOG-025'         = !"C05Ia_{YY}M_tsd"),
+    course.urls = c(
+      'S-BIOG-025'         = "https://classroom.github.com/a/WdbADUll"),
+    course.starts = c(
+      'S-BIOG-025'         = !"{W[13]+1} 08:00:00"),
+    course.ends = c(
+      'S-BIOG-025'         = !"{W[14]+1} 23:59:59"),
+    term = "Q1", level = 3,
+    toc = "Décomposition d'une série spatio-temporelle")
 ```
 
-```{r assign_C05Gb_ts_adv, echo=FALSE, results='asis'}
+
+<!--{r assign_C05Gb_ts_adv, echo=FALSE, results='asis'}
 if (exists("assignment2"))
   assignment2("C05Gb_ts_adv", part = NULL,
     url = "https://github.com/BioDataScience-Course/C05Gb_ts_adv",
@@ -625,11 +643,11 @@ if (exists("assignment2"))
       'S-BIOG-025'         = !"{W[15]+1} 23:59:59"),
     term = "Q1", level = 4, n = 2,
     toc = "Analyse libre d'une série spatio-temporelle")
-```
+-->
 
 ## Régularisation
 
-La régularisation d'une série spatio-temporelle permet de transformer une série échantillonnée avec un pas de temps irrégulier ou présentant des trous en une série régulière. Malheureusement, en biologie, on a rarement affaire à des séries parfaitement régulières, soit parce qu'il y a des observations manquantes, soit parce qu'on ne contrôle pas l'intervalle de temps. Dans ce cas, la régularisation est une opération préliminaire indispensable à beaucoup d'analyses de séries spatio-temporelles, que ce soit avec les outils {pastecs} ou avec d'autres méthodes. Les objets **ts** doivent être *d'office* des séries spatio-temporelles régulières dans R. Cette étape est donc requise pour adapter des **data frames** avant de pouvoir les transformer en séries temporelles ! Plusieurs méthodes de régularisation sont disponibles dans {pastecs} : régularisation par valeur constante (`regconst()`), linéaire (`reglin()`), par courbes splines (`regspline()`) et par la méthode des aires (`regarea()`). Afin de simplifier le travail de régularisation, et de faciliter ensuite la création des séries temporelles, toutes ces fonctions ont été regroupées sous une fonction commune `regul()`, dans la même philosophie que `tsd()` regroupe les différentes techniques de décomposition, par ailleurs implémentées par les fonctions `decXXX()`.
+La régularisation d'une série spatio-temporelle permet de transformer une série échantillonnée avec un pas de temps irrégulier ou présentant des trous en une série régulière. Malheureusement, en biologie, on a rarement affaire à des séries parfaitement régulières, soit parce qu'il y a des observations manquantes, soit parce qu'on ne contrôle pas l'intervalle de temps. Dans ce cas, la régularisation est une opération préliminaire indispensable à beaucoup d'analyses de séries spatio-temporelles, que ce soit avec les outils {pastecs} ou avec d'autres méthodes. Les objets **ts** doivent être *d'office* des séries spatio-temporelles régulières dans R. Cette étape est donc requise pour adapter des **data frame**s avant de pouvoir les transformer en séries temporelles ! Plusieurs méthodes de régularisation sont disponibles dans {pastecs} : régularisation par valeur constante (`regconst()`), linéaire (`reglin()`), par courbes splines (`regspline()`) et par la méthode des aires (`regarea()`). Afin de simplifier le travail de régularisation, et de faciliter ensuite la création des séries temporelles, toutes ces fonctions ont été regroupées sous une fonction commune `regul()`, dans la même philosophie que `tsd()` regroupe les différentes techniques de décomposition, par ailleurs implémentées par les fonctions `decXXX()`.
 
 ```{block2, type = 'warning'}
 Toutes ces méthodes sont à utiliser **avec précaution**. Il est très facile d’obtenir n’importe quoi si l’on choisit des mauvais paramètres ! Il n’y a pas de règle absolue dans leurs choix, étant donné qu’ils sont liés à la nature-même des données à régulariser. Par exemple, il faut être extrêmement attentif à ne pas régulariser à tort des données physico-chimiques (par exemple à l’aide de la méthode des aires avec une très grande fenêtre).
@@ -676,7 +694,7 @@ Nous allons donc régulariser le jeu de données avec cette valeur en convertiss
 À noter que, d'une manière générale, l'analyse de cycles bien précis tels que l'effet saisonnier ou les cycles circadiens nécessitent dans {pastecs} d'exprimer le temps dans une unité qui correspond exactement au cycle étudié. Ainsi, les fonctions de décomposition des séries en composantes saisonnières (`decloess()` par exemple) imposent d'exprimer le temps en unité `"years"`. De même, il est fortement conseillé d'adopté l'unité `"days"` pour l'étude de cycles circadiens.
 ```
 
-Un autre argument est aussi important ici, il s'agit de `tol =`. C'est la fenêtre de tolérance à gauche ou et à droite de la date requise dans la série régulière pour aller chercher une observation *sans l'interpoler*. Avec un pas de temps de 20 jours, on peut considérer que si nous avons à disposition une mesure la veille ou le lendemain, cela ne fera pas une grande différence. Peut-être même aussi l'avant-veille ou le surlendemain. Donc, nous prendrons une tolérance de 2 jours. Mais pour être certain de prendre les observations 2 jours avant ou après, on rajoute 10% à la valeur, donc, un `tol = 2.2` jour. Nous avons à présent (presque) tout ce qu'il faut pour régulariser notre série.
+Un autre argument est aussi important ici, il s'agit de `tol =`. C'est la fenêtre de tolérance à gauche ou à droite de la date requise dans la série régulière pour aller chercher une observation *sans l'interpoler*. Avec un pas de temps de 20 jours, on peut considérer que si nous avons à disposition une mesure la veille ou le lendemain, cela ne fera pas une grande différence. Peut-être même aussi l'avant-veille ou le surlendemain. Donc, nous prendrons une tolérance de 2 jours. Mais pour être certain de prendre les observations 2 jours avant ou après, on rajoute 10% à la valeur, donc, un `tol = 2.2` jour. Nous avons à présent (presque) tout ce qu'il faut pour régulariser notre série.
 
 ```{r}
 navi_reg <- regul(releve$Day, releve$Navi, n = length(releve$Day),
@@ -705,9 +723,9 @@ navi_reg <- regul(releve$Day, releve$Navi, n = 66,
 plot(navi_reg, main = "Régularisation de Navicula sp")
 ```
 
-Les pics et les creux dans la série régularisée (en rouge) sont assez bien représentatifs de ceux dans la série de départ (en noir), même si les gros pics éphémères sont légèrement tronqués. Les crois entourées d'un cercle indiquent les points qui ne sont *pas* interpolés parce qu'une valeur existe dans la fenêtre de tolérance de ± 2,2 jours. Par contre, les croix seules sont des valeurs interpolées linéairement entre les deux observations réalisées de part et d'autre de la date cible. Les traits verticaux et pointillés indiquent le début et la fin de la série de départ (en noir) et régularisée (en rouge). Nous ne perdons presque rien sur l'axe temporel, tout en n'extrapolant aucune valeur en dehors de l'intervalle de temps de la série initiale. C'est donc parfait.
+Les pics et les creux dans la série régularisée (en rouge) sont assez bien représentatifs de ceux dans la série de départ (en noir), même si les gros pics éphémères sont légèrement tronqués. Les croix entourées d'un cercle indiquent les points qui ne sont *pas* interpolés parce qu'une valeur existe dans la fenêtre de tolérance de ± 2,2 jours. Par contre, les croix seules sont des valeurs interpolées linéairement entre les deux observations réalisées de part et d'autre de la date cible. Les traits verticaux et pointillés indiquent le début et la fin de la série de départ (en noir) et régularisée (en rouge). Nous ne perdons presque rien sur l'axe temporel, tout en n'extrapolant aucune valeur en dehors de l'intervalle de temps de la série initiale. C'est donc parfait.
 
-L'extraction de la série régularisée à partir de l"objet `regul()` se fait exactement comme pour `tsd()` avec `tseries()`, ou alors avec `extract()` dans le cas où plusieurs séries auraient été régularisées simultanément, mais que nous ne voulons convertir qu'une partie d'entre elles en objet **ts** ou **mts**.
+L'extraction de la série régularisée à partir de l'objet **regul** se fait exactement comme pour `tsd()` avec `tseries()`, ou alors avec `extract()` dans le cas où plusieurs séries auraient été régularisées simultanément, mais que nous ne voulons convertir qu'une partie d'entre elles en objet **ts** ou **mts**.
 
 ```{r}
 navi <- tseries(navi_reg)
