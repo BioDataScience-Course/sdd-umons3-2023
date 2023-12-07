@@ -1,14 +1,14 @@
 # Statistiques spatiales {#spatial}
 
 ```{r setup, results='hide', warning=FALSE, include=FALSE}
-SciViews::R("spatial")
+SciViews::R("spatial", lang = "fr")
 ```
 
 Les statistiques spatiales, également en connexion avec les systèmes d'information géographique (SIG), représentent un très large sujet. Il intéresse potentiellement tout biologiste qui travaille avec des données spatialisées, qu'elles soient à 2, 3 ou 4 dimensions (écologie, environnement, épidémiologie, dynamique des populations, biodiversité, etc.) Il est impossible de l'aborder de manière exhaustive en un seul module. Il s'agit donc ici d'une première approche qui vise à vous montrer que R aussi peut être utile dans ce domaine. Voyez les liens dans les sections "pour en savoir plus" si vous voulez approfondir ce sujet.
 
 ##### Objectifs {.unnumbered}
 
--   Être capable de construire une carte dans R et d'y ajouter des éléments tels des points, des formes, des colorations spécifiques en fonction d'une variable quantitative ou qualitative
+-   Être capable de construire une carte dans R et d'y ajouter des éléments tels des points, des polygones, des colorations spécifiques en fonction d'une variable quantitative ou qualitative
 
 -   Comprendre les principaux systèmes de coordonnées géographiques
 
@@ -22,9 +22,9 @@ Ce module fait suite aux modules 4 et 5 consacrés aux séries spatio-temporelle
 
 Les cartes sont des outils de présentation très utiles dès lors que les données à représenter sont liées à des coordonnées géographiques. Des logiciels spécialisés dans le traitement de ce type de données et dans la réalisation de cartes existent : ce sont les logiciels de SIG (Systèmes d'Information Géographique, ou GIS en anglais). Le plus connu est sans aucun doute [ArcGIS](https://www.esri.com/en-us/arcgis/about-arcgis/overview). Des alternatives Open source existent comme [GRASS](https://grass.osgeo.org) ou [QGIS](https://www.qgis.org/en/site/). Ces outils sont assez complexes et requièrent une formation minimale non négligeable pour pouvoir les utiliser.
 
-Une alternative, si les besoins sont ponctuels, consiste à réaliser des cartes directement dans R. L'avantage avec R est de pouvoir associer des représentations graphiques avec les outils d'analyses statistiques. Il s'agit, à la fois, d'une option viable pour l'utilisateur occasionnel, et un choix qui se justifie dans des contextes où la carte n'est pas le seul élément important du projet (carte à intégrer dans un document R Markdown, ou à inclure dans un contenu dynamique tel un tableau de bord écrit en R et [Shiny](https://shiny.rstudio.com), par exemple). À titre d'exemple, vous pouvez explorer ces deux applications : [COVID-16 tracker](https://vac-lshtm.shinyapps.io/ncov_tracker/?_ga=2.222275100.56067852.1608025707-917889845.1607892304) et [ZIP explorer](https://shiny.rstudio.com/gallery/superzip-example.html) qui vous montrent que la cartographie et la gestion de données spatialisées dans R est parfaitement réalisables avec un résultat très professionnel.
+Une alternative, si les besoins sont ponctuels, consiste à réaliser des cartes directement dans R. L'avantage avec R est de pouvoir associer des représentations graphiques avec les outils d'analyses statistiques. Il s'agit, à la fois, d'une option viable pour l'utilisateur occasionnel, et un choix qui se justifie dans des contextes où la carte n'est pas le seul élément important du projet (carte à intégrer dans un document R Markdown, ou à inclure dans un contenu dynamique tel un tableau de bord écrit en R et [Shiny](https://shiny.rstudio.com), ou d'autres). À titre d'exemple, vous pouvez explorer ces deux applications : [COVID-16 tracker](https://vac-lshtm.shinyapps.io/ncov_tracker/?_ga=2.222275100.56067852.1608025707-917889845.1607892304) et [ZIP explorer](https://shiny.rstudio.com/gallery/superzip-example.html) qui vous montrent que la cartographie et la gestion de données spatialisées dans R est parfaitement réalisables avec un résultat très professionnel.
 
-Il existe de très nombreux packages dans R pour traiter les données spatialisées et réaliser des cartes, cependant {sf} est un package relativement récent (2017) dont l'objectif est de regrouper et optimiser les fonctionnalités qui sont proposées dans divers packages plus anciens tels que {sp}, {rgdal} et {rgeos}. Nous utiliserons donc ici principalement {sf}, combiné aux fonctionnalités de cartographie de {ggplot2} par l'intermédiaire de notre fonction habituelle de création de graphiques `chart()`.
+Il existe de très nombreux packages dans R pour traiter les données spatialisées et réaliser des cartes. {sf} est un package relativement récent (2017) dont l'objectif est de regrouper et optimiser les fonctionnalités qui sont proposées dans divers packages plus anciens tels que {sp}, {rgdal} et {rgeos}. Nous utiliserons donc ici principalement {sf}, combiné aux fonctionnalités de cartographie de {ggplot2} par l'intermédiaire de notre fonction habituelle de création de graphiques `chart()`.
 
 D'autres packages seront nécessaires, notamment ceux qui contiennent des fonds de cartes comme {tmap}. Dans R, il existe de nombreux objets différents pour représenter des données spatialisées. {sf} propose donc toute une série de fonctions pour les convertir en objets **sf** que nous privilégierons ici. Ainsi, pour avoir une carte du monde, nous pourrons faire ceci :
 
@@ -36,7 +36,7 @@ world <- st_as_sf(read("World", package = "tmap"))
 class(world)
 ```
 
-Un objet **sf** est un tableau de données classiques de type cas par variables que vous avez l'habitude de manipuler, mais qui contient une colonne décrivant la zone géographique concernée. Dans notre objet `world`, la colonne `geometry` décrit des polygones grâce au type **sfc_MULTIPOLYGON**. Le type de la variable `geometry` varie en fonction des coordonnées géographiques avec par exemple **sfc_POINT**, **sfc_LINESTRING** ou encore **sfc_POLYGON**.
+Un objet **sf** est un tableau de données classiques de type cas par variables **data.frame** que vous avez l'habitude de manipuler, mais qui contient une colonne décrivant la zone géographique concernée. Dans notre objet `world`, la colonne `geometry` décrit des polygones grâce au type **sfc_MULTIPOLYGON**. Le type de la variable `geometry` varie en fonction des coordonnées géographiques avec par exemple **sfc_POINT**, **sfc_LINESTRING** ou encore **sfc_POLYGON**.
 
 ```{r}
 world
@@ -48,12 +48,12 @@ world
 
 Nous voyons qu'outre les frontières des pays dans la variable `geometry`, {tmap} nous renvoie aussi une série d'autres données utiles, comme la superficie de chaque pays dans `area` (utile pour rapporter des observations par unité de surface, par exemple). De votre côté, vous pourrez donc combiner également vos données avec leur localisation dans un tableau **sf**.
 
-De plus, les objets **sf** sont compatibles avec les fonctions de manipulation de tableaux de données qui sont familières pour vous comme `select()`, `filter()`, `*_join()`,...
+De plus, les objets **sf** sont compatibles avec les fonctions de manipulation de tableaux de données qui sont familières pour vous comme `(s)select()`, `(s)filter()`, `*_join()`...
 
 ```{r}
 # Tableau réduit en éliminant des colonnes superflues
 world %>.%
-  select(., name, area, pop_est, economy, geometry) %->%
+  sselect(., name, area, pop_est, economy, geometry) ->
   world2
 
 head(world2)
@@ -126,7 +126,7 @@ chart(data = world) +
 Là où cela devient intéressant, c'est que nous avons la possibilité d'utiliser les autres variables contenues dans le tableau **sf** pour annoter la carte. Par exemple, nous pouvons remplir les polygones (`%fill=%`) représentant les différents pays à l'aide d'une couleur en fonction de la variable `economy`. Une petite astuce toutefois : une formule doit obligatoirement contenir une variable `x` après le tilde. Or ici, nous ne voulons fournir que `fill`, mais ni `x`, ni `y` dans la formule. Pour cela, nous indiquons `~ 0` qui sera compris par `chart()` comme aucun `x` et aucun `y`. Ensuite, nous pourrons rajouter toutes les autres esthétiques comprises par {ggplot2} à la suite dans la formule sous la forme `%aes=% variable`, donc ici, `%fill=% economy`.
 
 ```{r}
-chart(data = world, ~0 %fill=% economy) +
+chart(data = world, ~ 0 %fill=% economy) +
   geom_sf()
 ```
 
@@ -136,7 +136,7 @@ chart(data = world, ~0 %fill=% economy) +
 
 Pour présenter de l'information sur une carte, nous aurons donc besoin d'une ou plusieurs variables qualitatives ou quantitatives associées à des coordonnées spatiales. Les données et les coordonnées spatiales seront, en pratique, souvent dans deux tableaux différents. Vous aurez donc à les combiner en un tableau unique **sf** avant de pouvoir réaliser la carte voulue.
 
-Dans la suite de cette partie, nous verrons successivement comment ajouter une échelle et orienter une carte, comment importer des données géographiques et des fonds de cartes, et ce que sont les CRS ou systèmes de coordonnées géodésiques. Ces éléments sont indispensables pour tracer sa carte correctement. Dans la partie suivante, nous nous attaquerons à la partie qui concerne l'annotation de vos cartes.
+Dans la suite de cette partie, nous verrons successivement comment ajouter une échelle et orienter une carte, comment importer des données géographiques et des fonds de cartes, et ce que sont les CRS ou systèmes de coordonnées géodésiques. Ces éléments sont indispensables pour tracer sa carte correctement. Dans la partie suivante, nous nous attaquerons à l'annotation de cartes.
 
 ### Échelle et orientation
 
@@ -145,9 +145,10 @@ Toute carte qui se respecte contient deux éléments importants : une orientati
 La fonction `ggsn::north()` oriente le nord sur la carte, tandis que `ggsn::scalebar()` ajoute une barre d'échelle. Ces deux fonctions prennent comme premier argument, le jeu de données utilisé. Pour `ggsn::scalebar()` il faut aussi indiquer pas mal de choses pour paramétrer l'échelle, en particulier, la distance et l'unité. Cela demande quelques essais et erreurs avant d'avoir une barre d'échelle correcte. Par exemple pour l'Italie, cela donne :
 
 ```{r}
-italy %<-% filter(world, name == "Italy")
+italy <- filter(world, name == "Italy")
 chart(italy) +
   geom_sf() +
+  ggsn::blank() +
   ggsn::north(italy, location = "topright", symbol = 3) +
   ggsn::scalebar(italy, dist = 150, dist_unit = "km", location = "bottomleft",
     transform = TRUE, height = 0.015,
@@ -194,7 +195,7 @@ Cartes de l'Europe au format **shapefile** en fonction de l'échelle de la carte
 
 La terre n'est pas plate, vous le savez (elle n'est pas tout à fait ronde non plus). Son axe de rotation n'est pas fixe. La gravité y est variable. Nous devons donc projeter des objets tridimensionnels en deux dimensions sur notre carte. Une projection va inévitablement plus ou moins déformer notre visualisation en deux dimensions. Il existe plusieurs projections différentes avec des caractéristiques particulières (respect des distances, des volumes, etc.). Vous devrez sélectionner et utiliser celle qui convient le mieux à votre carte.
 
-La fonction `st_crs()` vous renvoie toutes les informations liées au système géodésique (*Coordinate Reference System, CRS*) utilisé. Ces notions sont très complexes et sortent du cadre de ce cours. Nous pouvons néanmoins citer le WGS84 qui est le système utilisé par le GPS que nous connaissons tous. Chaque pays a un système qui lui est propre et qui a évolué au cours du temps. Le tout rend le traitement des données spatiales encore plus complexe.
+La fonction `st_crs()` renvoie toutes les informations liées au système géodésique (*Coordinate Reference System, CRS*) utilisé. Ces notions sont très complexes et sortent du cadre de ce cours. Nous pouvons néanmoins citer le WGS84 qui est le système utilisé par le GPS que nous connaissons tous. Chaque pays a un système qui lui est propre et qui a évolué au cours du temps. Le tout rend le traitement des données spatiales encore plus complexe.
 
 Afin de clarifier et unifier ces différents systèmes de référence, un code est attribué à chacun d'eux dans le standard [**EPSG**](https://epsg.io). Par exemple, le EPSG:4326 correspond au système WGS84 cité plus haut et utilisé par les GPS. Lors de la combinaison de différentes données spatiales, il sera indispensable de vous assurer que ces données sont compatibles et utilisent le même CRS. La Belgique a employé et continue d'employer plusieurs systèmes différents. Le site [epsg.io](http://epsg.io/?q=belgium) en recense plusieurs. Nous vous conseillons vivement de lire maintenant [comprendre les CRS](https://medium.com/cr%C3%A9ation-dune-app-cartographique-avec-firebase-vue/comprendre-les-coordinates-reference-system-crs-b67a88bce63c) pour tout savoir ou presque sur ces systèmes de coordonnées.
 
@@ -219,10 +220,10 @@ Nous commençons avec une carte du continent africain tout entier :
 ```{r}
 world %>.%
   filter(., continent == "Africa") %>.%
-  mutate(., austral = name %in%  southern_africa) %->%
+  mutate(., austral = name %in%  southern_africa) ->
   africa
 
-chart(data = africa, ~0 %fill=% austral) +
+chart(data = africa, ~ 0 %fill=% austral) +
   geom_sf()
 ```
 
@@ -232,10 +233,10 @@ Ce second graphique utilise le CRS EPSG:22235 qui est centré sur l'Afrique du S
 
 ```{r}
 africa %>.%
-  st_transform(., 22235) %->%
+  st_transform(., 22235) ->
   africa_sa
 
-chart(data = africa_sa, ~0 %fill=% austral) +
+chart(data = africa_sa, ~ 0 %fill=% austral) +
   geom_sf()
 ```
 
@@ -251,7 +252,7 @@ Afin qu'une carte soit plus compréhensible, nous ajoutons des informations sous
 
 ```{r}
 africa_sa %>.%
-  filter(., name %in% southern_africa) %->%
+  filter(., name %in% southern_africa) ->
   s_africa_sa
 ```
 
@@ -261,7 +262,8 @@ Pour les Européens, par exemple, cette zone du monde est difficilement reconnai
 chart(data = s_africa_sa) +
   geom_sf() +
   geom_sf_text(aes(label = name), size = 3) +
-  ggsn::north(s_africa_sa)
+  ggsn::north(s_africa_sa) +
+  labs(x = "", y = "")
 ```
 
 ### Couches supplémentaires **sf**
@@ -270,7 +272,7 @@ Nous pouvons superposer plusieurs objets **sf** sur une même carte pour rendre 
 
 À titre d'illustration, nous allons ajouter une couche à la carte de l'Afrique du Sud qui localise les capitales des différents pays. Les capitales ainsi que leurs latitudes et longitudes en coordonnées de degrés décimaux[^06-spatial-1]. Les capitales des pays d'Afrique australe sont d'abord encodées dans un tableau classique et nommé `s_capitals` :
 
-[^06-spatial-1]: Les coordonnées latitude et longitudes sont d'habitude exprimées en degrés minutes secondes. Par contre, sur ordinateur, la forme de degrés décimaux est plus pratique. Les fractions de degrés sont représentées sous forme décimale, ce qui fait que la coordonnée peut être stockée dans un objet `numeric` classique (voir [ici](https://support.google.com/maps/answer/18539?co=GENIE.Platform%3DDesktop&hl=fr)). Des [convertisseurs en ligne](https://www.presqu-ile-de-crozon.com/conversion-des-coordonnees-gps.php) existent pour transformer les coordonnées d'un système à l'autre.
+[^06-spatial-1]: Les coordonnées latitude et longitudes sont d'habitude exprimées en degrés minutes secondes. Par contre, sur ordinateur, la forme de degrés décimaux est plus pratique. Les fractions de degrés sont représentées sous forme décimale, ce qui fait que la coordonnée peut être stockée dans un objet **numeric** classique (voir [ici](https://support.google.com/maps/answer/18539?co=GENIE.Platform%3DDesktop&hl=fr)). Des [convertisseurs en ligne](https://www.presqu-ile-de-crozon.com/conversion-des-coordonnees-gps.php) existent pour transformer les coordonnées d'un système à l'autre.
 
 ```{r}
 s_capitals <- dtx(
@@ -350,7 +352,7 @@ Les couches "raster" sont utilisées pour représenter, par exemple, des **modè
 
 ### Modèle terrain du Maroc
 
-Le Maroc présente un relief contrasté avec, au nord-ouest, la chaîne montagneuse de l'Atlas, et au sud, le désert du Sahara. Le modèle terrain avec une grille carrée d'un kilomètre environ de côté est disponible dans le package {aurelhy}. Les données dans {aurelhy} sont dans un format propriétaire et aucune fonction de conversion en **raster** ou **sf** n'y est proposée. Nous allons donc utiliser nos propres fonctions de conversion ici (elles seront intégrées dans la prochaine version du package {aurelhy}). Il n'est pas indispensable de comprendre le contenu de ce code en première lecture.
+Le Maroc présente un relief contrasté avec, au nord-ouest, la chaîne montagneuse de l'Atlas et au sud, le désert du Sahara. Le modèle terrain avec une grille carrée d'un kilomètre environ de côté est disponible dans le package {aurelhy}. Les données dans {aurelhy} sont dans un format propriétaire et aucune fonction de conversion en **raster** ou **sf** n'y est proposée. Nous allons donc utiliser nos propres fonctions de conversion ici (elles seront intégrées dans la prochaine version du package {aurelhy}). Il n'est pas indispensable de comprendre le contenu de ce code en première lecture.
 
 ```{r}
 # Transformation de geomat, geotm & geomask en raster
@@ -549,7 +551,7 @@ Nous allons d'abord effectuer une carte des frontières uniquement. Nous ne somm
 m_map <- tm_shape(m_bord) + tm_borders()
 ```
 
-La carte est construite, mais rien ne s'affiche. C'est exactement comme avec {ggplot2}. Pour afficher la carte, nous faisons\*/ :
+La carte est construite, mais rien ne s'affiche. C'est exactement comme avec {ggplot2}. Pour afficher la carte, nous faisons :
 
 ```{r}
 m_map
@@ -580,7 +582,7 @@ SciViews::R("spatial")
 
 read("World", package = "tmap") %>.%
   st_as_sf(.) %>.%
-  filter(., continent == "Africa") %>.%
+  sfilter(., continent == "Africa") %>.%
   mapview::mapview(.)
 ```
 
@@ -634,7 +636,7 @@ De nombreuses ressources existent sur Internet pour la cartographie avec R. En v
 
 -   [Cartographie avec R](https://rcarto.github.io/cartographie_avec_r/) est un bookdown en ligne qui présente la cartographie avec R. De nombreuses techniques complémentaires non abordées dans le cours y sont présentées.
 
--   [Initiation à la cartographie avec {sf} & Co. par Sébastien Rochette](https://statnmap.com/fr/2018-07-14-initiation-a-la-cartographie-avec-sf-et-compagnie/) est un article de blog sur la cartographie dans R. Il a rédigé plusieurs articles sur le sujet.
+-   [Initiation à la cartographie avec {sf} & Co. par Sébastien Rochette](https://statnmap.com/fr/2018-07-14-initiation-a-la-cartographie-avec-sf-et-compagnie/) est un article de blog sur la cartographie dans R. L'auteur a rédigé plusieurs articles sur le sujet.
 
 -   Site web du [package sf](https://r-spatial.github.io/sf/index.html). Documentation officielle (en anglais).
 
@@ -654,7 +656,7 @@ De nombreuses ressources existent sur Internet pour la cartographie avec R. En v
 
 Parmi les nombreuses techniques statistiques appliquées aux données géoréférencées ([autocorrélation spatiale](https://mgimond.github.io/Spatial/spatial-autocorrelation.html), [analyse de motifs de points](https://mgimond.github.io/Spatial/chp11_0.html), [modélisation spatiale et spatio-temporelle](https://www.paulamoraga.com/book-geospatial/sec-arealdataexamplespatial.html), [classification et segmentation de zones géographiques](https://www.r-bloggers.com/2020/03/analyzing-remote-sensing-data-using-image-segmentation/) ...) nous nous attarderons sur l'une des plus utiles : l'[**interpolation spatiale**](https://mgimond.github.io/Spatial/spatial-interpolation.html). Son principe consiste à interpoler la variation d'une mesure quantitative dans une zone géographique donnée à partir de mesures éparses. Cette interpolation spatiale permet de construire ensuite des cartes bien plus percutantes.
 
-Il est en effet plutôt rare d'avoir une couverture dense de mesures sur une grande étendue géographique. Si nous prenons l'exemple de données météorologiques, mis à part l'utilisation d'images satellites, les données sont la plupart du temps obtenues à partir d'un réseau de station météorologiques plus ou moins dense. Dans notre exemple, nous nous intéresserons à la **pluviométrie** exprimée en mm d'eau par an. Un pluviomètre est un appareil simple qui recueille l'eau tombée du ciel sur une surface donnée et qui contient un tube gradué en mm. Il suffit alors de lire la valeur après un laps de temps donné pour connaître la quantité cumulée d'eau qui est tombée du ciel.
+Il est en effet plutôt rare d'avoir une couverture dense de mesures sur une grande étendue géographique. Si nous prenons l'exemple de données météorologiques, mis à part l'utilisation d'images satellites, les données sont la plupart du temps obtenues à partir d'un réseau de stations plus ou moins dense. Dans notre exemple, nous nous intéresserons à la **pluviométrie** exprimée en mm d'eau par an. Un pluviomètre est un appareil simple qui recueille l'eau tombée du ciel sur une surface donnée et qui contient un tube gradué en mm. Il suffit alors de lire la valeur après un laps de temps donné pour connaître la quantité cumulée d'eau qui est tombée du ciel.
 
 ![Pluviomètre, par [Jean Wilmotte](http://www.jeanwilmotte.it/page/103/), CC-BY-SA.](images/06-spatial/pluviometre.jpg)
 
@@ -664,7 +666,7 @@ Il est en effet plutôt rare d'avoir une couverture dense de mesures sur une gra
 
 ### Où pleut-il au Maroc ?
 
-Les données que nous allons traiter comme exemple ne sont pas dénuées d'intérêt pour le botaniste, le zoologiste, ou encore, l'écoconseiller, qui ont tous besoin de données environnementales pour comprendre la distribution des plantes et des animaux. Bien sûr, la technique est également utilisable dans bien d'autres contextes (distribution des espèces et biodiversité, gradients de pollution, progression d'une épidémie, etc.)
+Les données que nous allons traiter comme exemple ne sont pas dénuées d'intérêt pour le botaniste, le zoologiste, ou encore, l'écoconseiller, qui ont tous besoin de données environnementales pour comprendre la distribution des plantes et des animaux. Bien sûr, la technique est également utilisable dans bien d'autres contextes : distribution des espèces et biodiversité, gradients de pollution, progression d'une épidémie, etc.
 
 Sur base de nos données relatives au Maroc que nous avons utilisées comme exemple jusqu'ici, nous avons également `mrain` qui propose des mesures de pluviométrie en mm/an enregistrées en une quarantaine de stations météorologiques réparties sur tout le territoire, mais de manière inégale. Cet objet **geopoints** doit être converti en **sf** comme à notre habitude.
 
@@ -702,7 +704,7 @@ L'interpolation spatiale est possible parce que, comme pour les séries chronolo
 
 ### Interpolation avec DIP
 
-Nous allons utiliser le package [{gstat}](https://r-spatial.github.io/gstat/) pour interpoler la pluviométrie marocaine. Celui-ci propose [plusieurs techniques d'interpolation](http://132.72.155.230:3838/r/spatial-interpolation-of-point-data.html). La méthode de la distance inversée pondérée (DIP, *inverse weighted distance en anglais ou IDW*) est une méthode simple. Elle calcule la moyenne pondérée par l'inverse de la distance entre le point à interpoler et les points de valeurs connues au voisinage. Le calcul se fait comme suit :
+Nous allons utiliser le package [{gstat}](https://r-spatial.github.io/gstat/) pour interpoler la pluviométrie marocaine. Celui-ci propose plusieurs techniques d'interpolation. La méthode de la distance inversée pondérée (DIP, *inverse weighted distance en anglais ou IDW*) est une méthode simple. Elle calcule la moyenne pondérée par l'inverse de la distance entre le point à interpoler et les points de valeurs connues au voisinage. Le calcul se fait comme suit :
 
 $$\hat{Z}(s_0) = \frac{\sum_{i=1}^n w(s_i) Z(s_i)}{\sum_{i=1}^n w(s_i)}$$
 
@@ -743,7 +745,10 @@ m_rain_idw <- predict(m_g_idw, newdata = st_as_stars(m_tm2))
 m_rain_idw
 ```
 
-Le résultat est aussi un objet **stars** avec deux composantes : - `var1.pred`, les prédictions - `var1.var`, la variance estimée (plus elle est grande en un point, plus la prédiction est incertaine)
+Le résultat est aussi un objet **stars** avec deux composantes :
+
+- `var1.pred`, les prédictions
+- `var1.var`, la variance estimée (plus elle est grande en un point, plus la prédiction est incertaine)
 
 Dans le cas de DIP, la variance n'est pas calculée (la colonne contient uniquement des `NA`s). Cet objet est utilisable par {tmap} directement. Nous pouvons en extraire une composante à l'aide de l'opérateur `["composante",,]`. Donc, nous pouvons faire :
 
@@ -866,7 +871,7 @@ m_rain2 <- drop_na(m_rain2)
 m_rain2
 ```
 
-Nous pouvons maintenant explorer un krigegage universel avec le modèle terrain comme covariable. La formule `rain ~ 1`du krigeage ordinaire est donc remplacée ici par `rain ~ elevation`.
+Nous pouvons maintenant explorer un krigeage universel avec le modèle terrain comme covariable. La formule `rain ~ 1`du krigeage ordinaire est donc remplacée ici par `rain ~ elevation`.
 
 ```{r}
 m_vario_ku <- auto_variogram(data = m_rain2, rain ~ elevation)
@@ -891,7 +896,7 @@ m_map_ku <- m_map + tm_shape(m_rain_ku) +
     title = "Pluie [mm/an] - KrigU") +
   tm_layout(legend.position = c("left", "top")) +
   tm_shape(m_rain) + tm_dots(col = "darkblue", size = 0.05)
-# Représentation côte à côte de IDW et krigeage ordinaire
+# Représentation côte à côte de IDW et krigeage universel
 tmap_arrange(m_map_ko, m_map_ku)
 ```
 
@@ -947,7 +952,7 @@ geomrain <- as.geomat(pmrain)
 geomrain <- 10^geomrain # Revenir de l'échelle logarithmique
 ```
 
-Comme il se peut que l'interpolation ait donné des valeurs très élevées ou très, très basses en quelques points, nous allons niveler un peu tout cela vers une plage de valeurs effectivement observées.
+Comme il se peut que l'interpolation ait donné des valeurs très élevées ou très basses en quelques points, nous allons niveler un peu tout cela vers une plage de valeurs effectivement observées.
 
 ```{r}
 range(geomrain, na.rm = TRUE)
@@ -968,7 +973,7 @@ rain_ras <- st_as_raster(geomrain)
 rain_ras
 ```
 
-Enfin, nous réalisons une carte de la pluviométrie que nous plaçons côte à côte avec le meilleur krigeage pour comparaison à l'aide de `tm_arrange()`.
+Enfin, nous réalisons une carte de la pluviométrie que nous plaçons côte à côte avec le krigeage universel tenant compte du relief pour comparaison à l'aide de `tm_arrange()`.
 
 ```{r}
 m_map_rain <- m_map + tm_shape(rain_ras) +
@@ -990,19 +995,19 @@ tmap_arrange(m_map3, m_map_rain + tm_compass() + tm_scale_bar())
 
 ##### À vous de jouer ! {.unnumbered}
 
-```{r assign_C06Ia_map, echo=FALSE, results='asis'}
-if (exists("assignment"))
-  assignment("C06Ia_map", part = NULL,
-    url = "https://github.com/BioDataScience-Course/C06Ia_map",
+```{r assign_C06Ga_map, echo=FALSE, results='asis'}
+if (exists("assignment2"))
+  assignment2("C06Ga_map", part = NULL,
+    url = "https://github.com/BioDataScience-Course/C06Ga_map",
     course.ids = c(
-      'S-BIOG-025'         = !"C06Ia_{YY}M_map"),
+      'S-BIOG-025'         = !"C06Ga_{YY}M_map"),
     course.urls = c(
-      'S-BIOG-025'         = "https://classroom.github.com/a/..."),
+      'S-BIOG-025'         = "https://classroom.github.com/a/lRMy9ls5"),
     course.starts = c(
       'S-BIOG-025'         = !"{W[15]+1} 08:00:00"),
     course.ends = c(
-      'S-BIOG-025'         = !"{W[15]+4} 23:59:59"),
-    term = "Q1", level = 3,
+      'S-BIOG-025'         = !"{W[15]+5} 23:59:59"),
+    term = "Q1", level = 4, n = 2,
     toc = "Cartographie des abeilles sauvages de Belgique")
 ```
 
@@ -1014,7 +1019,7 @@ if (exists("assignment"))
 
 -   [Geospatial Health Data: modeling and visualization with R-INLA and Shiny](https://www.paulamoraga.com/book-geospatial/) insiste particulièrement sur les cartes interactives et les applications Shiny (dashboard) pour présenter des données et modèles géospatialisés de manière vivante et interactive (en anglais).
 
--   [Spatial Data Science with R](https://rspatial.org/raster/index.html) en anglais propose tout un chapitre consacré à la modélisation de la distribution des espèces.
+-   [Spatial Data Science with R](https://rspatial.org/raster/index.html) en anglais développe tout un chapitre consacré à la modélisation de la distribution des espèces.
 
 -   [CRAN Task View: Analysis of Spatial Data](https://cran.r-project.org/web/views/Spatial.html), en anglais. Répertorie tous les packages de CRAN (le site officiel de distribution de packages R additionnels) qui traitent des statistiques spatiales et de la cartographie.
 
